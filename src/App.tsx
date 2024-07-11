@@ -1,36 +1,43 @@
-import { useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { ReactNode, Suspense, useContext } from "react";
+import Login from "./pages/Login";
+import { AuthContext } from "./auth/context";
+import Home from "./pages/Home";
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+  const { currentUser } = useContext(AuthContext);
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name }));
-  }
+  const ProtectedRoute = ({ children }: { children: ReactNode }) => {
+    if (!currentUser) {
+      return <Navigate to="/login" />;
+    }
+
+    return children;
+  };
 
   return (
-    <div className="">
-      <h1>Welcome to Tauri!</h1>
-
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}>
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Suspense fallback={<p>Loading...</p>}>
+                <Home />
+              </Suspense>
+            </ProtectedRoute>
+          }
         />
-        <button type="submit">Greet</button>
-      </form>
-
-      <p>{greetMsg}</p>
-    </div>
+        <Route
+          path="/login"
+          element={
+            <Suspense fallback={<p>Loading...</p>}>
+              <Login />
+            </Suspense>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
