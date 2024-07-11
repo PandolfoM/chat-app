@@ -3,6 +3,7 @@ import { ReactNode, Suspense, useContext } from "react";
 import Login from "./pages/Login";
 import { AuthContext } from "./auth/context";
 import Home from "./pages/Home";
+import Signup from "./pages/Signup";
 
 function App() {
   const { currentUser } = useContext(AuthContext);
@@ -10,6 +11,14 @@ function App() {
   const ProtectedRoute = ({ children }: { children: ReactNode }) => {
     if (!currentUser) {
       return <Navigate to="/login" />;
+    }
+
+    return children;
+  };
+
+  const PublicRoute = ({ children }: { children: ReactNode }) => {
+    if (currentUser) {
+      return <Navigate to="/" />;
     }
 
     return children;
@@ -31,9 +40,21 @@ function App() {
         <Route
           path="/login"
           element={
-            <Suspense fallback={<p>Loading...</p>}>
-              <Login />
-            </Suspense>
+            <PublicRoute>
+              <Suspense fallback={<p>Loading...</p>}>
+                <Login />
+              </Suspense>
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <PublicRoute>
+              <Suspense fallback={<p>Loading...</p>}>
+                <Signup />
+              </Suspense>
+            </PublicRoute>
           }
         />
       </Routes>

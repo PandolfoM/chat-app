@@ -11,6 +11,7 @@ export const AuthContext = createContext<AuthContextType>({
   currentUser: null,
   setCurrentUser: () => {},
 });
+
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
@@ -21,7 +22,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
       }
     });
 
-    unsub();
+    return () => unsub();
   }, []);
 
   return (

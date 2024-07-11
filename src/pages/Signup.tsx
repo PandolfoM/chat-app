@@ -1,13 +1,12 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
-import Button from "../components/Button";
-import { Input } from "../components/Input";
-import { auth } from "../firebase";
-import { useContext, useState } from "react";
-import { AuthContext } from "../auth/context";
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import { AuthContext } from "../auth/context";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+import { Input } from "../components/Input";
+import Button from "../components/Button";
 
 const schema = yup
   .object({
@@ -17,7 +16,7 @@ const schema = yup
   .required();
 type FormData = yup.InferType<typeof schema>;
 
-function Login() {
+function Signup() {
   const {
     register,
     handleSubmit,
@@ -25,34 +24,24 @@ function Login() {
   } = useForm({ resolver: yupResolver(schema) });
   const { setCurrentUser } = useContext(AuthContext);
   const [error, setError] = useState<string>("");
-  const navigate = useNavigate();
 
-  const handleLogin = (data: FormData) => {
-    console.log("clicked");
-
-    signInWithEmailAndPassword(auth, data.email, data.password)
+  const handleSignup = (data: FormData) => {
+    createUserWithEmailAndPassword(auth, data.email, data.password)
       .then((userCredential) => {
         const user = userCredential.user;
         setCurrentUser(user);
-        navigate("/");
       })
       .catch((err) => {
         const msg: string = err.message;
-        if (msg.includes("invalid-email")) {
-          setError("Invalid email");
-        } else if (msg.includes("invalid-credential")) {
-          setError("Invalid credentials");
-        } else {
-          setError(msg);
-        }
+        setError(msg);
       });
   };
 
   return (
     <form
       className="flex flex-col gap-2 w-full h-full justify-center p-2"
-      onSubmit={handleSubmit(handleLogin)}>
-      <h1 className="text-center text-xl">Login</h1>
+      onSubmit={handleSubmit(handleSignup)}>
+      <h1 className="text-center text-xl">Create Account</h1>
       <div>
         <Input placeholder="Email" {...register("email")} />
         <p className="text-sm text-error">{errors.email?.message}</p>
@@ -68,17 +57,17 @@ function Login() {
       </div>
 
       <p className="opacity-50 text-sm">
-        Don't have an account?{" "}
-        <a className="p-0 underline" href="/signup">
-          Create an account
+        Already have an account?{" "}
+        <a className="p-0 underline" href="/login">
+          Login
         </a>
       </p>
       {error && <p className="text-sm text-error">{error}</p>}
       <Button className="w-full mt-4" type="submit">
-        Login
+        Create Account
       </Button>
     </form>
   );
 }
 
-export default Login;
+export default Signup;
