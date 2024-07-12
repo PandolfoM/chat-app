@@ -6,11 +6,14 @@ export default {
     extend: {
       colors: {
         transparent: "transparent",
-        background: "#0E0F1E",
-        primary: "#F300AE",
+        backgroundDark: "#0E0F1E",
+        background: "#e3e5e7",
+        primaryDark: "#F300AE",
+        primary: "#3e66fb",
         secondary: "#8E39C5",
         card: "#7B61FF",
-        error: "#B3001B",
+        // error: "#B3001B",
+        error: "#dc3435",
         success: "#72C96E",
         warning: "#E3B23C",
       },

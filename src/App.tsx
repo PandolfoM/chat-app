@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import { AuthContext } from "./auth/context";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
+import NavBar from "./components/Navbar";
 
 function App() {
   const { currentUser } = useContext(AuthContext);
@@ -32,6 +33,7 @@ function App() {
           element={
             <ProtectedRoute>
               <Suspense fallback={<p>Loading...</p>}>
+                <NavBar />
                 <Home />
               </Suspense>
             </ProtectedRoute>
