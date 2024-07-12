@@ -6,11 +6,14 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../auth/context";
 
 function NavBar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { currentUser } = useContext(AuthContext);
 
   return (
     <nav className="flex items-center justify-between px-5 pt-5 pb-10">
@@ -27,7 +30,7 @@ function NavBar() {
           <FontAwesomeIcon icon={faUser} size="xl" className="text-white" />
         </div>
         <div>
-          <h3>Matt Pandolfo</h3>
+          <h3>{currentUser?.displayName}</h3>
           {location.pathname === "/" ? (
             <p className="text-xs">💼 Working</p>
           ) : (
