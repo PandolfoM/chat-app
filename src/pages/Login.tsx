@@ -72,7 +72,7 @@ function Login() {
         </a>
       </p>
       {error && <p className="text-sm text-error">{error}</p>}
-      <Button className="w-full mt-4" type="submit">
+      <Button variant="filled" className="w-full mt-4" type="submit">
         Login
       </Button>
     </form>

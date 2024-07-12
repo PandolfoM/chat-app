@@ -4,10 +4,11 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../auth/context";
 import * as yup from "yup";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { Input } from "../components/Input";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
+import { doc, setDoc } from "firebase/firestore";
 
 const schema = yup
   .object({
@@ -27,17 +28,30 @@ function Signup() {
   const [error, setError] = useState<string>("");
   const navigate = useNavigate();
 
-  const handleSignup = (data: FormData) => {
-    createUserWithEmailAndPassword(auth, data.email, data.password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        setCurrentUser(user);
-        navigate("/");
-      })
-      .catch((err) => {
-        const msg: string = err.message;
-        setError(msg);
+  const handleSignup = async (data: FormData) => {
+    try {
+      const res = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+
+      await setDoc(doc(db, "users", res.user.uid), {
+        email: data.email,
+        id: res.user.uid,
+        blocked: [],
       });
+
+      await setDoc(doc(db, "userchats", res.user.uid), {
+        chats: [],
+      });
+
+      setCurrentUser(res.user);
+      navigate("/registername");
+    } catch (err: any) {
+      console.log(err);
+      setError(err.message);
+    }
   };
 
   return (
@@ -66,7 +80,7 @@ function Signup() {
         </a>
       </p>
       {error && <p className="text-sm text-error">{error}</p>}
-      <Button className="w-full mt-4" type="submit">
+      <Button variant="filled" className="w-full mt-4" type="submit">
         Create Account
       </Button>
     </form>

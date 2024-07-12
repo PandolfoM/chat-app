@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import NavBar from "./components/Navbar";
 import Chat from "./pages/Chat";
+import RegisterName from "./pages/RegisterName";
 
 function App() {
   const { currentUser } = useContext(AuthContext);
@@ -13,6 +14,10 @@ function App() {
   const ProtectedRoute = ({ children }: { children: ReactNode }) => {
     if (!currentUser) {
       return <Navigate to="/login" />;
+    }
+
+    if (!currentUser.displayName) {
+      return <Navigate to="/registername" />;
     }
 
     return children;
@@ -71,6 +76,16 @@ function App() {
                 <Signup />
               </Suspense>
             </PublicRoute>
+          }
+        />
+        <Route
+          path="/registername"
+          element={
+            <ProtectedRoute>
+              <Suspense fallback={<p>Loading...</p>}>
+                <RegisterName />
+              </Suspense>
+            </ProtectedRoute>
           }
         />
       </Routes>

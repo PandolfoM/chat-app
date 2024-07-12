@@ -41,11 +41,9 @@ function Home() {
         </section>
         <section className="fixed right-1/2 translate-x-1/2 flex flex-col items-end bottom-5 w-[90%]">
           <NewChatDialog>
-            <Button
-              variant="filled"
-              className="flex items-center gap-2 w-fit py-4 px-7">
+            <div className="rounded-full text-sm text-white disabled:bg-opacity-30 disabled:opacity-60 bg-primary flex items-center gap-2 w-fit py-4 px-7">
               <FontAwesomeIcon icon={faComment} /> New Chat
-            </Button>
+            </div>
           </NewChatDialog>
         </section>
       </div>

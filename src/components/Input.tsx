@@ -13,12 +13,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const [showPassword, setShowPassword] = React.useState<boolean>(false);
     return (
       <span
-        className={
-          (cn(
-            type === "password" && "flex items-center overflow-hidden relative"
-          ),
-          "w-full")
-        }>
+        className={cn(
+          type === "password"
+            ? "flex items-center overflow-hidden relative"
+            : "w-full"
+        )}>
         <input
           type={showPassword ? "text" : type}
           className={cn(
