@@ -28,8 +28,6 @@ function Login() {
   const navigate = useNavigate();
 
   const handleLogin = (data: FormData) => {
-    console.log("clicked");
-
     signInWithEmailAndPassword(auth, data.email, data.password)
       .then((userCredential) => {
         const user = userCredential.user;
