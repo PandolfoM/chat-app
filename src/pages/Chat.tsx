@@ -17,7 +17,6 @@ import {
   doc,
   getDoc,
   onSnapshot,
-  serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { ChatContext } from "../context/chatContext";
@@ -44,13 +43,9 @@ interface ChatData {
 }
 
 function Chat() {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  const { register, handleSubmit, watch, setValue } = useForm({
+    resolver: yupResolver(schema),
+  });
   const { currentUser } = useContext(AuthContext);
   const msgValue = watch("msg");
   const endRef = useRef<HTMLDivElement>(null);
