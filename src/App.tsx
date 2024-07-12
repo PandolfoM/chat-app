@@ -16,16 +16,16 @@ function App() {
       return <Navigate to="/login" />;
     }
 
-    if (!currentUser.displayName) {
-      return <Navigate to="/registername" />;
-    }
-
     return children;
   };
 
   const PublicRoute = ({ children }: { children: ReactNode }) => {
     if (currentUser) {
-      return <Navigate to="/" />;
+      if (currentUser.displayName === null) {
+        return <Navigate to="/registername" />;
+      } else {
+        return <Navigate to="/" />;
+      }
     }
 
     return children;

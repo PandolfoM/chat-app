@@ -27,23 +27,31 @@ function Login() {
   const [error, setError] = useState<string>("");
   const navigate = useNavigate();
 
-  const handleLogin = (data: FormData) => {
-    signInWithEmailAndPassword(auth, data.email, data.password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        setCurrentUser(user);
+  const handleLogin = async (data: FormData) => {
+    try {
+      const signIn = await signInWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+
+      setCurrentUser(signIn.user);
+      if (signIn.user.displayName === null) {
+        navigate("/registername");
+      } else {
         navigate("/");
-      })
-      .catch((err) => {
-        const msg: string = err.message;
-        if (msg.includes("invalid-email")) {
-          setError("Invalid email");
-        } else if (msg.includes("invalid-credential")) {
-          setError("Invalid credentials");
-        } else {
-          setError(msg);
-        }
-      });
+      }
+    } catch (err: any) {
+      const msg: string = err.message;
+      setError(msg);
+      if (msg.includes("invalid-email")) {
+        setError("Invalid email");
+      } else if (msg.includes("invalid-credential")) {
+        setError("Invalid credentials");
+      } else {
+        setError(msg);
+      }
+    }
   };
 
   return (

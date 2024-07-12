@@ -9,11 +9,31 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../auth/context";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./Dropdown";
 
 function NavBar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, setCurrentUser } = useContext(AuthContext);
+
+  const handleSignout = async () => {
+    try {
+      await signOut(auth);
+      setCurrentUser(null);
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <nav className="flex items-center justify-between px-5 pt-5 pb-10">
@@ -41,13 +61,23 @@ function NavBar() {
           )}
         </div>
       </div>
-      <div className="flex gap-5">
+      <div className="flex gap-5 items-center">
         {location.pathname === "/" ? (
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         ) : (
           <FontAwesomeIcon icon={faPhone} />
         )}
-        <FontAwesomeIcon icon={faEllipsisV} />
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <FontAwesomeIcon icon={faEllipsisV} />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleSignout}>Logout</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </nav>
   );

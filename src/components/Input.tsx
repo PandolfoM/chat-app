@@ -19,6 +19,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             : "w-full"
         )}>
         <input
+          autoCapitalize="off"
+          autoCorrect="off"
           type={showPassword ? "text" : type}
           className={cn(
             "flex h-10 caret-primary dark:caret-primaryDark w-full rounded-2xl bg-white text-black dark:bg-white/5 px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-black/60 dark:placeholder:text-white/50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",

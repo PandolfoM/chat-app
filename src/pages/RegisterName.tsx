@@ -4,7 +4,14 @@ import * as yup from "yup";
 import { Input } from "../components/Input";
 import Button from "../components/Button";
 import { useContext, useState } from "react";
-import { doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { AuthContext } from "../auth/context";
 import { updateProfile } from "firebase/auth";
@@ -24,19 +31,23 @@ function RegisterName() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
   const [error, setError] = useState<string>("");
-  const { currentUser, setCurrentUser } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const saveUsername = async (data: FormData) => {
-    console.log(data.username);
-
     try {
       if (currentUser) {
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("username", "==", data.username));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          return setError("Username already exists");
+        }
+
         await updateProfile(currentUser, {
           displayName: data.username,
         });
-
-        console.log(currentUser);
 
         await updateDoc(doc(db, "users", currentUser?.uid), {
           username: data.username,
