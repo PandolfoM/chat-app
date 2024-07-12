@@ -93,7 +93,7 @@ export const Textarea = React.forwardRef<
         value={value}
         ref={textAreaRef}
         className={cn(
-          "flex items-center h-full w-full rounded-2xl bg-background px-3 py-2 text-sm focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+          "flex items-center h-full w-full rounded-2xl bg-background px-3 py-2 text-sm focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 caret-primary dark:caret-primaryDark",
           className
         )}
         onChange={(e) => {

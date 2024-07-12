@@ -7,6 +7,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { Input } from "../components/Input";
 import Button from "../components/Button";
+import { useNavigate } from "react-router-dom";
 
 const schema = yup
   .object({
@@ -24,12 +25,14 @@ function Signup() {
   } = useForm({ resolver: yupResolver(schema) });
   const { setCurrentUser } = useContext(AuthContext);
   const [error, setError] = useState<string>("");
+  const navigate = useNavigate();
 
   const handleSignup = (data: FormData) => {
     createUserWithEmailAndPassword(auth, data.email, data.password)
       .then((userCredential) => {
         const user = userCredential.user;
         setCurrentUser(user);
+        navigate("/");
       })
       .catch((err) => {
         const msg: string = err.message;
