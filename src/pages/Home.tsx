@@ -4,21 +4,27 @@ import User from "../components/User";
 import { NewChatDialog } from "../components/dialogs";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext, UserDocI } from "../auth/context";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import { ChatI, UserChatsI } from "../lib/interfaces";
+import { ChatI } from "../lib/interfaces";
+import Button from "../components/Button";
+import { ChatContext } from "../context/chatContext";
+import { useNavigate } from "react-router-dom";
 
-interface PromiseData {
+export interface ChatPromiseData {
   chatId: string;
   lastMessage: string;
   receiverId: string;
   updatedAt: number;
+  isSeen: boolean;
   user: UserDocI;
 }
 
 function Home() {
-  const { currentUser } = useContext(AuthContext);
-  const [chats, setChats] = useState<PromiseData[] | []>([]);
+  const { currentUser, currentUserDoc } = useContext(AuthContext);
+  const { changeChat } = useContext(ChatContext);
+  const [chats, setChats] = useState<ChatPromiseData[] | []>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const unsub = onSnapshot(
@@ -46,6 +52,32 @@ function Home() {
     return () => unsub();
   }, [currentUser?.uid]);
 
+  const handleSelect = async (chat: ChatPromiseData) => {
+    changeChat(chat.chatId, chat.user);
+    navigate("/chat");
+
+    const userChats = chats.map((item) => {
+      const { user, ...rest } = item;
+      return rest;
+    });
+
+    const chatIndex = userChats.findIndex(
+      (item) => item.chatId === chat.chatId
+    );
+
+    userChats[chatIndex].isSeen = true;
+
+    const userChatsRef = doc(db, "userchats", currentUser?.uid as string);
+
+    try {
+      await updateDoc(userChatsRef, {
+        chats: userChats,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col gap-2 relative">
@@ -70,9 +102,13 @@ function Home() {
             <div className="flex flex-col gap-3">
               <h3 className="opacity-60 text-sm">Conversation</h3>
               <div className="flex flex-col gap-7">
-                {chats?.map((chat, i) => (
-                  <User key={i} user={chat.user} />
-                  // <p>{chat.user}</p>
+                {chats?.map((chat) => (
+                  <Button
+                    variant="ghost"
+                    key={chat.chatId}
+                    onClick={() => handleSelect(chat)}>
+                    <User user={chat.user} chat={chat} />
+                  </Button>
                 ))}
               </div>
             </div>

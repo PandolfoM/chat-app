@@ -98,7 +98,7 @@ function NewChatDialog({ children }: { children: ReactNode }) {
           />
           {user && (
             <Button variant="ghost" className="px-0" onClick={handleAdd}>
-              <User key={user.id} user={user} newChat />
+              <User key={user.id} user={user} />
             </Button>
           )}
           <Button variant="filled" className="w-full" type="submit">

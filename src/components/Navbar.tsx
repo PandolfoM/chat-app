@@ -75,7 +75,9 @@ function NavBar() {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem onClick={handleSignout}>Logout</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleSignout()}>
+              Logout
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

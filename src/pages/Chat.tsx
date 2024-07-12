@@ -9,10 +9,20 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "../components/Button";
-import { auth, db } from "../firebase";
-import { useContext, useEffect, useRef } from "react";
+import { db } from "../firebase";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../auth/context";
-import { addDoc, collection, query, serverTimestamp } from "firebase/firestore";
+import {
+  arrayUnion,
+  doc,
+  getDoc,
+  onSnapshot,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
+import { ChatContext } from "../context/chatContext";
+import { useNavigate } from "react-router-dom";
+import { cn, formatDate } from "../lib/utils";
 
 const schema = yup
   .object({
@@ -20,6 +30,18 @@ const schema = yup
   })
   .required();
 type FormData = yup.InferType<typeof schema>;
+
+interface ChatMessage {
+  text: string;
+  // name: currentUser?.displayName, //! wont update if user changes their name or pfp?
+  // avatar: currentUser?.photoURL,
+  createdAt: number;
+  senderId: string;
+}
+interface ChatData {
+  createdAt: Date;
+  messages: ChatMessage[];
+}
 
 function Chat() {
   const {
@@ -32,75 +54,84 @@ function Chat() {
   const { currentUser } = useContext(AuthContext);
   const msgValue = watch("msg");
   const endRef = useRef<HTMLDivElement>(null);
+  const [chat, setChat] = useState<ChatData | null>(null);
+  const { chatId, user } = useContext(ChatContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "instant" });
   }, []);
 
-  const handleSend = async (data: FormData) => {
-    console.log(data.msg);
+  useEffect(() => {
+    if (!chatId) return navigate("/");
 
-    await addDoc(collection(db, "messages"), {
-      text: data.msg,
-      // name: currentUser?.displayName, //! wont update if user changes their name or pfp?
-      // avatar: currentUser?.photoURL,
-      createdAt: serverTimestamp(),
-      uid: currentUser?.uid,
+    const unsub = onSnapshot(doc(db, "chats", chatId), (res) => {
+      setChat(res.data() as ChatData);
     });
+
+    return () => unsub();
+  }, [chatId]);
+
+  const handleSend = async (data: FormData) => {
+    try {
+      await updateDoc(doc(db, "chats", chatId), {
+        messages: arrayUnion({
+          senderId: currentUser?.uid,
+          text: data.msg,
+          createdAt: Date.now(),
+        }),
+      });
+
+      const userIds = [currentUser?.uid, user?.id];
+      userIds.forEach(async (id) => {
+        const userChatsRef = doc(db, "userchats", id as string);
+        const userChatsSnap = await getDoc(userChatsRef);
+
+        if (userChatsSnap.exists()) {
+          const userChatsData = userChatsSnap.data();
+          const chatIndex = userChatsData.chats.findIndex(
+            (c: any) => c.chatId === chatId
+          );
+
+          userChatsData.chats[chatIndex].lastMessage = data.msg;
+          userChatsData.chats[chatIndex].isSeen =
+            id === currentUser?.uid ? true : false;
+          userChatsData.chats[chatIndex].updatedAt = Date.now();
+
+          await updateDoc(userChatsRef, {
+            chats: userChatsData.chats,
+          });
+        }
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <div className="flex flex-col overflow-hidden h-full">
       <section className="rounded-2xl bg-backgroundSecondary p-3 flex flex-col gap-3 overflow-y-auto w-full h-full relative">
-        <div className="bg-white w-fit max-w-[75%] px-3 py-1 rounded-2xl">
-          hello world test test
-          <p className="text-xs opacity-60 text-left pt-1">7:37 AM</p>
-        </div>
-        <div className="bg-primary text-white w-fit max-w-[75%] px-3 py-1 rounded-2xl self-end">
-          epic message sent from matthew pandolfo awesome epic cool
-          <p className="text-xs opacity-60 text-right pt-1">7:37 AM</p>
-        </div>
-        <div className="bg-white w-fit max-w-[75%] px-3 py-1 rounded-2xl">
-          hello world test test
-          <p className="text-xs opacity-60 text-left pt-1">7:37 AM</p>
-        </div>
-        <div className="bg-primary text-white w-fit max-w-[75%] px-3 py-1 rounded-2xl self-end">
-          epic message sent from matthew pandolfo awesome epic cool
-          <p className="text-xs opacity-60 text-right pt-1">7:37 AM</p>
-        </div>
-        <div className="bg-white w-fit max-w-[75%] px-3 py-1 rounded-2xl">
-          hello world test test
-          <p className="text-xs opacity-60 text-left pt-1">7:37 AM</p>
-        </div>
-        <div className="bg-primary text-white w-fit max-w-[75%] px-3 py-1 rounded-2xl self-end">
-          epic message sent from matthew pandolfo awesome epic cool
-          <p className="text-xs opacity-60 text-right pt-1">7:37 AM</p>
-        </div>
-        <div className="bg-white w-fit max-w-[75%] px-3 py-1 rounded-2xl">
-          hello world test test
-          <p className="text-xs opacity-60 text-left pt-1">7:37 AM</p>
-        </div>
-        <div className="bg-primary text-white w-fit max-w-[75%] px-3 py-1 rounded-2xl self-end">
-          epic message sent from matthew pandolfo awesome epic cool
-          <p className="text-xs opacity-60 text-right pt-1">7:37 AM</p>
-        </div>
-        <div className="bg-white w-fit max-w-[75%] px-3 py-1 rounded-2xl">
-          hello world test test
-          <p className="text-xs opacity-60 text-left pt-1">7:37 AM</p>
-        </div>
-        <div className="bg-primary text-white w-fit max-w-[75%] px-3 py-1 rounded-2xl self-end">
-          epic message sent from matthew pandolfo awesome epic cool
-          <p className="text-xs opacity-60 text-right pt-1">7:37 AM</p>
-        </div>
-        <div className="bg-white w-fit max-w-[75%] px-3 py-1 rounded-2xl">
-          hello world test test
-          <p className="text-xs opacity-60 text-left pt-1">7:37 AM</p>
-        </div>
-        <div className="bg-primary text-white w-fit max-w-[75%] px-3 py-1 rounded-2xl self-end">
-          epic message sent from matthew pandolfo awesome epic cool
-          <p className="text-xs opacity-60 text-right pt-1">7:37 AM</p>
-        </div>
-        <div className="invisible" ref={endRef}></div>
+        {chat?.messages.map((msg, i) => (
+          <div
+            key={i}
+            className={cn(
+              currentUser?.uid === msg.senderId
+                ? "bg-primary self-end text-white"
+                : "bg-white text-black",
+              "w-fit max-w-[75%] px-3 py-1 rounded-2xl"
+            )}>
+            {msg.text}
+            <p
+              className={cn(
+                currentUser?.uid === msg.senderId ? "text-right" : "text-left ",
+                "text-xs opacity-60 pt-1"
+              )}>
+              {formatDate(msg.createdAt)}
+            </p>
+          </div>
+        ))}
+
+        <div ref={endRef}></div>
       </section>
       <section className="m-5">
         <form

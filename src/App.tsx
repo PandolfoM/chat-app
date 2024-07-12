@@ -7,11 +7,16 @@ import Signup from "./pages/Signup";
 import NavBar from "./components/Navbar";
 import Chat from "./pages/Chat";
 import RegisterName from "./pages/RegisterName";
+import Spinner from "./components/Spinner";
 
 function App() {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, isLoading } = useContext(AuthContext);
 
   const ProtectedRoute = ({ children }: { children: ReactNode }) => {
+    if (isLoading) {
+      return <Spinner />;
+    }
+
     if (!currentUser) {
       return <Navigate to="/login" />;
     }
@@ -20,6 +25,10 @@ function App() {
   };
 
   const PublicRoute = ({ children }: { children: ReactNode }) => {
+    if (isLoading) {
+      return <Spinner />;
+    }
+
     if (currentUser) {
       if (currentUser.displayName === null) {
         return <Navigate to="/registername" />;
@@ -38,7 +47,7 @@ function App() {
           path="/"
           element={
             <ProtectedRoute>
-              <Suspense fallback={<p>Loading...</p>}>
+              <Suspense fallback={<Spinner />}>
                 <NavBar />
                 <Home />
               </Suspense>
@@ -49,7 +58,7 @@ function App() {
           path="/chat"
           element={
             <ProtectedRoute>
-              <Suspense fallback={<p>Loading...</p>}>
+              <Suspense fallback={<Spinner />}>
                 <div className="w-full h-full flex flex-col">
                   <NavBar />
                   <Chat />
@@ -62,7 +71,7 @@ function App() {
           path="/login"
           element={
             <PublicRoute>
-              <Suspense fallback={<p>Loading...</p>}>
+              <Suspense fallback={<Spinner />}>
                 <Login />
               </Suspense>
             </PublicRoute>
@@ -72,7 +81,7 @@ function App() {
           path="/signup"
           element={
             <PublicRoute>
-              <Suspense fallback={<p>Loading...</p>}>
+              <Suspense fallback={<Spinner />}>
                 <Signup />
               </Suspense>
             </PublicRoute>
@@ -82,7 +91,7 @@ function App() {
           path="/registername"
           element={
             <ProtectedRoute>
-              <Suspense fallback={<p>Loading...</p>}>
+              <Suspense fallback={<Spinner />}>
                 <RegisterName />
               </Suspense>
             </ProtectedRoute>
