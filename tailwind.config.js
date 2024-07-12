@@ -8,6 +8,7 @@ export default {
         transparent: "transparent",
         backgroundDark: "#0E0F1E",
         background: "#e3e5e7",
+        backgroundSecondary: "#f9fafa",
         primaryDark: "#F300AE",
         primary: "#3e66fb",
         secondary: "#8E39C5",

@@ -5,6 +5,7 @@ import { AuthContext } from "./auth/context";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import NavBar from "./components/Navbar";
+import Chat from "./pages/Chat";
 
 function App() {
   const { currentUser } = useContext(AuthContext);
@@ -35,6 +36,19 @@ function App() {
               <Suspense fallback={<p>Loading...</p>}>
                 <NavBar />
                 <Home />
+              </Suspense>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <Suspense fallback={<p>Loading...</p>}>
+                <div className="w-full h-full flex flex-col">
+                  <NavBar />
+                  <Chat />
+                </div>
               </Suspense>
             </ProtectedRoute>
           }

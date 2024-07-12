@@ -1,6 +1,7 @@
 import { faThumbTack } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import User from "../components/User";
+import { Link } from "react-router-dom";
 
 function Home() {
   return (
@@ -13,7 +14,9 @@ function Home() {
             <FontAwesomeIcon icon={faThumbTack} /> Pinned
           </h3>
           <div className="flex flex-col gap-7">
-            <User />
+            <Link to="/chat">
+              <User />
+            </Link>
             <User />
           </div>
         </div>

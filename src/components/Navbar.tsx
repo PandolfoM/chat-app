@@ -1,18 +1,49 @@
 import {
+  faChevronLeft,
   faEllipsisV,
   faMagnifyingGlass,
+  faPhone,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function NavBar() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   return (
     <nav className="flex items-center justify-between px-5 pt-5 pb-10">
-      <div className="w-12 aspect-square bg-primary rounded-full flex items-center justify-center">
-        <FontAwesomeIcon icon={faUser} size="xl" className="text-white" />
+      <div className="flex items-center justify-center gap-2">
+        {location.pathname !== "/" && (
+          <FontAwesomeIcon
+            icon={faChevronLeft}
+            size="lg"
+            className="pr-2 cursor-pointer"
+            onClick={() => navigate(-1)}
+          />
+        )}
+        <div className="bg-primary h-12 aspect-square rounded-full flex items-center justify-center">
+          <FontAwesomeIcon icon={faUser} size="xl" className="text-white" />
+        </div>
+        <div>
+          <h3>Matt Pandolfo</h3>
+          {location.pathname === "/" ? (
+            <p className="text-xs">💼 Working</p>
+          ) : (
+            <div className="text-xs flex items-center gap-1">
+              <div className="w-3 h-3 aspect-square rounded-full bg-success" />
+              Online
+            </div>
+          )}
+        </div>
       </div>
       <div className="flex gap-5">
-        <FontAwesomeIcon icon={faMagnifyingGlass} />
+        {location.pathname === "/" ? (
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
+        ) : (
+          <FontAwesomeIcon icon={faPhone} />
+        )}
         <FontAwesomeIcon icon={faEllipsisV} />
       </div>
     </nav>
