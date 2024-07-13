@@ -51,8 +51,10 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
     if (userDoc.exists()) {
       setCurrenUserDoc(userDoc.data() as UserDocI);
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (

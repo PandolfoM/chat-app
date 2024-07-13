@@ -1,6 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowUp,
+  faCamera,
+  faImage,
   faMicrophone,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
@@ -22,6 +24,12 @@ import {
 import { ChatContext } from "../context/chatContext";
 import { useNavigate } from "react-router-dom";
 import { cn, formatDate } from "../lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../components/Dropdown";
 
 const schema = yup
   .object({
@@ -132,7 +140,19 @@ function Chat() {
         <form
           className="bg-backgroundSecondary flex items-center gap-3 rounded-2xl px-5"
           onSubmit={handleSubmit(handleSend)}>
-          <FontAwesomeIcon icon={faPlus} />
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <FontAwesomeIcon icon={faPlus} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem className="flex gap-2">
+                <FontAwesomeIcon icon={faCamera} /> Camera
+              </DropdownMenuItem>
+              <DropdownMenuItem className="flex gap-2">
+                <FontAwesomeIcon icon={faImage} /> Photos
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <div className="flex-1">
             <Textarea
               placeholder="Type message..."
