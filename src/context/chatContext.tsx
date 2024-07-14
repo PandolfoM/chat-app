@@ -1,13 +1,4 @@
-import { onAuthStateChanged, User } from "firebase/auth";
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { auth, db } from "../firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { createContext, ReactNode, useContext, useState } from "react";
 import { AuthContext } from "../auth/context";
 
 export interface UserDocI {
@@ -58,14 +49,16 @@ export const ChatContextProvider = ({ children }: { children: ReactNode }) => {
 
     // Check if current user is blocked
     if (user.blocked.includes(currentUserDoc?.id as string)) {
+      console.log("current user blocked");
+
       setChatId(chatId);
-      setUser(null);
+      setUser(user);
       setIsCurrentUserBlocked(true);
       setIsReceiverBlocked(false);
       return;
     }
     // Check if receiver is blocked
-    else if (currentUserDoc?.blocked.includes(currentUserDoc?.id as string)) {
+    else if (currentUserDoc?.blocked.includes(user?.id as string)) {
       setChatId(chatId);
       setUser(user);
       setIsCurrentUserBlocked(false);

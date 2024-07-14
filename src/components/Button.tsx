@@ -19,7 +19,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
     const customOutline =
       "font-bold custom-border disabled:opacity-50 transition-[opacity] duration-300 ease-in-out py-1.5";
     const ghost =
-      "disabled:text-white/50 disabled:hover:underline rounded-full w-full";
+      "disabled:text-white/50 disabled:hover:underline rounded-full w-full disabled:bg-opacity-60";
     const filled =
       "rounded-full text-sm py-3 px-8 text-white disabled:bg-opacity-30 disabled:opacity-60 bg-primary";
 

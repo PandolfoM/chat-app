@@ -10,7 +10,7 @@ import { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../auth/context";
 import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,11 +19,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./Dropdown";
+import { ChatContext } from "../context/chatContext";
+import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
 
 function NavBar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { currentUser, setCurrentUser } = useContext(AuthContext);
+  const { user, changeBlock, isReceiverBlocked } = useContext(ChatContext);
 
   const handleSignout = async () => {
     try {
@@ -32,6 +35,21 @@ function NavBar() {
       navigate("/login");
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleBlock = async () => {
+    if (!user) return;
+
+    const userDocRef = doc(db, "users", currentUser?.uid as string);
+
+    try {
+      await updateDoc(userDocRef, {
+        blocked: isReceiverBlocked ? arrayRemove(user.id) : arrayUnion(user.id),
+      });
+      changeBlock();
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -50,7 +68,11 @@ function NavBar() {
           <FontAwesomeIcon icon={faUser} size="xl" className="text-white" />
         </div>
         <div>
-          <h3>{currentUser?.displayName}</h3>
+          {location.pathname === "/" ? (
+            <h3>{currentUser?.displayName}</h3>
+          ) : (
+            <h3>{user?.username}</h3>
+          )}
           {location.pathname === "/" ? (
             <p className="text-xs">💼 Working</p>
           ) : (
@@ -67,19 +89,34 @@ function NavBar() {
         ) : (
           <FontAwesomeIcon icon={faPhone} />
         )}
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <FontAwesomeIcon icon={faEllipsisV} />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleSignout()}>
-              Logout
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {location.pathname === "/" ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <FontAwesomeIcon icon={faEllipsisV} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleSignout()}>
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <FontAwesomeIcon icon={faEllipsisV} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem
+                onClick={handleBlock}
+                className="cursor-pointer">
+                {isReceiverBlocked ? "Unblock" : "Block"}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
     </nav>
   );

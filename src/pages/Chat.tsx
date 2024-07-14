@@ -58,7 +58,8 @@ function Chat() {
   const msgValue = watch("msg");
   const endRef = useRef<HTMLDivElement>(null);
   const [chat, setChat] = useState<ChatData | null>(null);
-  const { chatId, user } = useContext(ChatContext);
+  const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } =
+    useContext(ChatContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -112,8 +113,23 @@ function Chat() {
   };
 
   return (
-    <div className="flex flex-col overflow-hidden h-full">
-      <section className="rounded-2xl bg-backgroundSecondary p-3 flex flex-col gap-3 overflow-y-auto w-full h-full relative">
+    <div className="flex flex-col overflow-hidden h-full gap-2">
+      <section
+        className={cn(
+          isCurrentUserBlocked || isReceiverBlocked
+            ? "overflow-y-hidden"
+            : "overflow-y-auto",
+          "rounded-2xl bg-backgroundSecondary p-3 flex flex-col gap-3 w-full h-full relative"
+        )}>
+        {(isCurrentUserBlocked || isReceiverBlocked) && (
+          <div className="absolute bottom-0 right-0 top-0 left-0 bg-background/60 h-full w-full z-10 flex items-center justify-center">
+            <h3>
+              {isCurrentUserBlocked
+                ? `${user?.username} has blocked you`
+                : `You have blocked ${user?.username}`}
+            </h3>
+          </div>
+        )}
         {chat?.messages.map((msg, i) => (
           <div
             key={i}
@@ -123,17 +139,24 @@ function Chat() {
                 : "bg-white text-black",
               "w-fit max-w-[75%] px-3 py-1 rounded-2xl"
             )}>
-            {msg.text}
+            <p
+              className={cn(
+                isCurrentUserBlocked || isReceiverBlocked ? "blur-sm" : "blur-0"
+              )}>
+              {msg.text}
+            </p>
             <p
               className={cn(
                 currentUser?.uid === msg.senderId ? "text-right" : "text-left ",
+                isCurrentUserBlocked || isReceiverBlocked
+                  ? "blur-sm"
+                  : "blur-0",
                 "text-xs opacity-60 pt-1"
               )}>
               {formatDate(msg.createdAt)}
             </p>
           </div>
         ))}
-
         <div ref={endRef}></div>
       </section>
       <section className="m-5">
@@ -141,7 +164,8 @@ function Chat() {
           className="bg-backgroundSecondary flex items-center gap-3 rounded-2xl px-5"
           onSubmit={handleSubmit(handleSend)}>
           <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger
+              disabled={isCurrentUserBlocked || isReceiverBlocked}>
               <FontAwesomeIcon icon={faPlus} />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
@@ -155,16 +179,23 @@ function Chat() {
           </DropdownMenu>
           <div className="flex-1">
             <Textarea
-              placeholder="Type message..."
+              placeholder={
+                isCurrentUserBlocked || isReceiverBlocked
+                  ? "Cannot send a message"
+                  : "Type message..."
+              }
               className="bg-transparent border-l-2 rounded-none my-5 resize-none"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
-                  handleSubmit(handleSend)();
+                  if (!isCurrentUserBlocked && !isReceiverBlocked) {
+                    handleSubmit(handleSend)();
+                  }
                 }
               }}
               minHeight={20}
               maxHeight={200}
+              disabled={isCurrentUserBlocked || isReceiverBlocked}
               {...register("msg", {
                 onChange: (e) => setValue("msg", e.target.value),
               })}
@@ -174,7 +205,8 @@ function Chat() {
             <Button
               variant="ghost"
               type="submit"
-              className="bg-primary w-5 h-5 p-3 rounded-full flex items-center justify-center text-white transition-all">
+              className="bg-primary w-5 h-5 p-3 rounded-full flex items-center justify-center text-white transition-all"
+              disabled={isCurrentUserBlocked || isReceiverBlocked}>
               <FontAwesomeIcon icon={faArrowUp} size="sm" />
             </Button>
           ) : (

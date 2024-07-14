@@ -28,11 +28,7 @@ const schema = yup
 type FormData = yup.InferType<typeof schema>;
 
 function NewChatDialog({ children }: { children: ReactNode }) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  const { register, handleSubmit } = useForm({ resolver: yupResolver(schema) });
   const [user, setUser] = useState<UserDocI | null>(null);
   const { currentUserDoc } = useContext(AuthContext);
 
