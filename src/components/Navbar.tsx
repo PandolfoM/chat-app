@@ -21,12 +21,14 @@ import {
 } from "./Dropdown";
 import { ChatContext } from "../context/chatContext";
 import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { cn } from "../lib/utils";
 
 function NavBar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { currentUser, setCurrentUser } = useContext(AuthContext);
-  const { user, changeBlock, isReceiverBlocked } = useContext(ChatContext);
+  const { user, changeBlock, isReceiverBlocked, isCurrentUserBlocked } =
+    useContext(ChatContext);
 
   const handleSignout = async () => {
     try {
@@ -77,8 +79,15 @@ function NavBar() {
             <p className="text-xs">💼 Working</p>
           ) : (
             <div className="text-xs flex items-center gap-1">
-              <div className="w-3 h-3 aspect-square rounded-full bg-success" />
-              Online
+              <div
+                className={cn(
+                  isCurrentUserBlocked || isReceiverBlocked
+                    ? "bg-zinc-500"
+                    : "bg-success",
+                  "w-3 h-3 aspect-square rounded-full"
+                )}
+              />
+              {isCurrentUserBlocked || isReceiverBlocked ? "Offline" : "Online"}
             </div>
           )}
         </div>
