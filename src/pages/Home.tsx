@@ -1,15 +1,21 @@
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import User from "../components/User";
 import { NewChatDialog } from "../components/dialogs";
-import { useContext, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { AuthContext, UserDocI } from "../auth/context";
 import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { ChatI } from "../lib/interfaces";
-import Button from "../components/Button";
 import { ChatContext } from "../context/chatContext";
 import { useNavigate } from "react-router-dom";
+import ChatList from "../components/ChatList";
+import { AppContext } from "../context/appContext";
 
 export interface ChatPromiseData {
   chatId: string;
@@ -21,7 +27,8 @@ export interface ChatPromiseData {
 }
 
 function Home() {
-  const { currentUser, currentUserDoc } = useContext(AuthContext);
+  const { search } = useContext(AppContext);
+  const { currentUser } = useContext(AuthContext);
   const { changeChat } = useContext(ChatContext);
   const [chats, setChats] = useState<ChatPromiseData[] | []>([]);
   const navigate = useNavigate();
@@ -43,8 +50,11 @@ function Home() {
           });
 
           const chatData = await Promise.all(promises);
-          // @ts-ignore
-          setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
+          setChats((prevChats) =>
+            prevChats.length === chatData.length
+              ? prevChats
+              : chatData.sort((a, b) => b.updatedAt - a.updatedAt)
+          );
         }
       }
     );
@@ -78,6 +88,10 @@ function Home() {
     }
   };
 
+  const filteredChats = chats.filter((c) =>
+    c.user.username.toLowerCase().includes(search?.toLowerCase() as string)
+  );
+
   return (
     <>
       <div className="flex flex-col gap-2 relative">
@@ -98,21 +112,7 @@ function Home() {
             </div>
           </div> */}
           {/* Chats */}
-          {chats.length > 0 && (
-            <div className="flex flex-col gap-3">
-              <h3 className="opacity-60 text-sm">Conversation</h3>
-              <div className="flex flex-col gap-7">
-                {chats?.map((chat) => (
-                  <Button
-                    variant="ghost"
-                    key={chat.chatId}
-                    onClick={() => handleSelect(chat)}>
-                    <User user={chat.user} chat={chat} />
-                  </Button>
-                ))}
-              </div>
-            </div>
-          )}
+          <ChatList chats={filteredChats} handleSelect={handleSelect} />
         </section>
         <section className="fixed right-1/2 translate-x-1/2 flex flex-col items-end bottom-5 w-[90%]">
           <NewChatDialog>
