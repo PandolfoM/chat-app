@@ -1,6 +1,8 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { UserDocI } from "../auth/context";
 import { cn, formatDate, getInitials } from "../lib/utils";
 import { ChatPromiseData } from "../pages/Home";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
   user: UserDocI;
@@ -8,10 +10,20 @@ type Props = {
 };
 
 function User({ user, chat }: Props) {
+  console.log(user.color);
+
   return (
     <div className="flex gap-3 w-full">
-      <span className="w-11 h-11 aspect-square bg-primary text-white rounded-full flex items-center justify-center ring-2 ring-offset-2 ring-warning">
-        {getInitials(user.username)}
+      <span
+        className={cn(
+          `w-11 h-11 aspect-square text-white rounded-full flex items-center justify-center ring-2 ring-offset-2 ring-success`,
+          user.status === "online" && "ring-success",
+          user.status === "away" && "ring-warning",
+          user.status === "offline" && "ring-zinc-500",
+          user.status === "dnd" && "ring-error"
+        )}
+        style={{ backgroundColor: user.color }}>
+        <FontAwesomeIcon icon={faUser} size="lg" />
       </span>
       <section className="flex items-center gap-2 w-full relative">
         <div

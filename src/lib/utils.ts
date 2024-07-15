@@ -27,3 +27,9 @@ export function getInitials(name: string) {
   }
   return "";
 }
+
+export function getProfileColor() {
+  const colors = ["#3e66fb", "#dc3435", "#72C96E", "#E3B23C", "#71717A"];
+  const randomIndex = Math.floor(Math.random() * colors.length);
+  return colors[randomIndex];
+}

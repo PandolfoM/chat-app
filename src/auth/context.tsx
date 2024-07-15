@@ -11,6 +11,7 @@ export interface UserDocI {
   status: "online" | "offline" | "away" | "dnd";
   statusMsg: string;
   pfp: string;
+  color: "#3e66fb" | "#dc3435" | "#72C96E" | "#E3B23C" | "#71717A";
 }
 
 type AuthContextType = {

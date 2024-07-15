@@ -9,6 +9,7 @@ import { Input } from "../components/Input";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import { doc, setDoc } from "firebase/firestore";
+import { getProfileColor } from "../lib/utils";
 
 const schema = yup
   .object({
@@ -42,6 +43,7 @@ function Signup() {
         status: "online",
         statusMsg: "",
         blocked: [],
+        color: getProfileColor(),
       });
 
       await setDoc(doc(db, "userchats", res.user.uid), {
