@@ -10,8 +10,6 @@ type Props = {
 };
 
 function User({ user, chat }: Props) {
-  console.log(user.color);
-
   return (
     <div className="flex gap-3 w-full">
       <span
