@@ -99,7 +99,10 @@ function Settings() {
 
       if (data.pfp && data.pfp instanceof File) {
         const file = data.pfp;
-        const storageRef = ref(storage, `${currentUserDoc.username}-pfp`);
+        const storageRef = ref(
+          storage,
+          `profile-pics/${currentUserDoc.username}-pfp`
+        );
 
         // Convert the file to ArrayBuffer
         const reader = new FileReader();
