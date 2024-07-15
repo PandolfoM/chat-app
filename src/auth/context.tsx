@@ -8,6 +8,9 @@ export interface UserDocI {
   username: string;
   id: string;
   blocked: string[];
+  status: "online" | "offline" | "away" | "dnd";
+  statusMsg: string;
+  pfp: string;
 }
 
 type AuthContextType = {

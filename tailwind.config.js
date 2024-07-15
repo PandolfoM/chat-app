@@ -12,6 +12,7 @@ export default {
         primaryDark: "#F300AE",
         primary: "#3e66fb",
         secondary: "#8E39C5",
+        customGrey: "#dee1e5",
         card: "#7B61FF",
         // error: "#B3001B",
         error: "#dc3435",

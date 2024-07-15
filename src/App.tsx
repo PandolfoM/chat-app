@@ -8,13 +8,18 @@ import NavBar from "./components/Navbar";
 import Chat from "./pages/Chat";
 import RegisterName from "./pages/RegisterName";
 import Spinner from "./components/Spinner";
+import Settings from "./pages/Settings";
 
 function App() {
   const { currentUser, isLoading } = useContext(AuthContext);
 
   const ProtectedRoute = ({ children }: { children: ReactNode }) => {
     if (isLoading) {
-      return <Spinner />;
+      return (
+        <>
+          <Spinner /> {children}
+        </>
+      );
     }
 
     if (!currentUser) {
@@ -26,7 +31,11 @@ function App() {
 
   const PublicRoute = ({ children }: { children: ReactNode }) => {
     if (isLoading) {
-      return <Spinner />;
+      return (
+        <>
+          <Spinner /> {children}
+        </>
+      );
     }
 
     if (currentUser) {
@@ -62,6 +71,20 @@ function App() {
                 <div className="w-full h-full flex flex-col">
                   <NavBar />
                   <Chat />
+                </div>
+              </Suspense>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Suspense>
+                <div className="w-full h-full flex flex-col">
+                  <NavBar />
+                  <Settings />
                 </div>
               </Suspense>
             </ProtectedRoute>

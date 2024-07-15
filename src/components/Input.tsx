@@ -23,8 +23,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           autoCorrect="off"
           type={showPassword ? "text" : type}
           className={cn(
-            "flex h-10 caret-primary dark:caret-primaryDark w-full rounded-2xl bg-white text-black dark:bg-white/5 px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-black/60 dark:placeholder:text-white/50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
-            type === "password" && "flex-1 w-full",
+            "flex h-10 py-6 caret-primary dark:caret-primaryDark w-full rounded-2xl bg-backgroundSecondary border-customGrey border-2 text-black dark:bg-white/5 px-4 text-sm placeholder:text-customGrey dark:placeholder:text-white/50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+            type === "password" && "flex-1 w-full ",
+            type === "file" &&
+              "h-full py-[0.9rem] file:border-0 file:bg-transparent",
             className
           )}
           ref={ref}

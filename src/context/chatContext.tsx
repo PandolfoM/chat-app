@@ -1,12 +1,5 @@
 import { createContext, ReactNode, useContext, useState } from "react";
-import { AuthContext } from "../auth/context";
-
-export interface UserDocI {
-  email: string;
-  username: string;
-  id: string;
-  blocked: string[];
-}
+import { AuthContext, UserDocI } from "../auth/context";
 
 type ChatContextType = {
   chatId: string;

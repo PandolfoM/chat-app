@@ -39,6 +39,8 @@ function Signup() {
       await setDoc(doc(db, "users", res.user.uid), {
         email: data.email,
         id: res.user.uid,
+        status: "online",
+        statusMsg: "",
         blocked: [],
       });
 

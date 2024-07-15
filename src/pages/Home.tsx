@@ -95,12 +95,11 @@ function Home() {
   return (
     <>
       <div className="flex flex-col gap-2 relative">
+        <h1 className="px-5 text-3xl font-extrabold">Chat</h1>
         {chats.length > 0 && (
-          <h1 className="px-5 text-3xl font-extrabold">Chat</h1>
-        )}
-        <section className="bg-white rounded-2xl p-3 mx-1">
-          {/* Pinned */}
-          {/* <div className="rounded-t-2xl bg-white p-3 flex flex-col gap-3">
+          <section className="bg-backgroundSecondary rounded-2xl p-3 mx-1">
+            {/* Pinned */}
+            {/* <div className="rounded-t-2xl bg-white p-3 flex flex-col gap-3">
             <h3 className="opacity-60 text-sm">
               <FontAwesomeIcon icon={faThumbTack} /> Pinned
             </h3>
@@ -111,9 +110,10 @@ function Home() {
               <User />
             </div>
           </div> */}
-          {/* Chats */}
-          <ChatList chats={filteredChats} handleSelect={handleSelect} />
-        </section>
+            {/* Chats */}
+            <ChatList chats={filteredChats} handleSelect={handleSelect} />
+          </section>
+        )}
         <section className="fixed right-1/2 translate-x-1/2 flex flex-col items-end bottom-5 w-[90%]">
           <NewChatDialog>
             <div className="rounded-full text-sm text-white disabled:bg-opacity-30 disabled:opacity-60 bg-primary flex items-center gap-2 w-fit py-4 px-7">

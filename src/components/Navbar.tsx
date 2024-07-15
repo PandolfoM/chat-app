@@ -21,9 +21,10 @@ import {
 } from "./Dropdown";
 import { ChatContext } from "../context/chatContext";
 import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
-import { cn } from "../lib/utils";
 import { Input } from "./Input";
 import { AppContext } from "../context/appContext";
+import Status from "./Status";
+import ProfilePicture from "./ProfilePicture";
 
 function NavBar() {
   const location = useLocation();
@@ -71,36 +72,18 @@ function NavBar() {
               onClick={() => navigate(-1)}
             />
           )}
-          <div className="bg-primary h-12 aspect-square rounded-full flex items-center justify-center">
-            <FontAwesomeIcon icon={faUser} size="xl" className="text-white" />
-          </div>
+          <ProfilePicture className="h-12 w-12" />
           <div>
-            {location.pathname === "/" ? (
+            {location.pathname !== "/chat" ? (
               <h3>{currentUser?.displayName}</h3>
             ) : (
               <h3>{user?.username}</h3>
             )}
-            {location.pathname === "/" ? (
-              <p className="text-xs">💼 Working</p>
-            ) : (
-              <div className="text-xs flex items-center gap-1">
-                <div
-                  className={cn(
-                    isCurrentUserBlocked || isReceiverBlocked
-                      ? "bg-zinc-500"
-                      : "bg-success",
-                    "w-3 h-3 aspect-square rounded-full"
-                  )}
-                />
-                {isCurrentUserBlocked || isReceiverBlocked
-                  ? "Offline"
-                  : "Online"}
-              </div>
-            )}
+            <Status />
           </div>
         </div>
         <div className="flex gap-5 items-center">
-          {setIsSearch ? (
+          {location.pathname !== "/chat" ? (
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
               onClick={() => setIsSearch(!isSearch)}
@@ -108,34 +91,33 @@ function NavBar() {
           ) : (
             <FontAwesomeIcon icon={faPhone} />
           )}
-          {location.pathname === "/" ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <FontAwesomeIcon icon={faEllipsisV} />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleSignout()}>
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <FontAwesomeIcon icon={faEllipsisV} />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem
-                  onClick={handleBlock}
-                  className="cursor-pointer">
-                  {isReceiverBlocked ? "Unblock" : "Block"}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <FontAwesomeIcon icon={faEllipsisV} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {location.pathname === "/" ? (
+                <>
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate("/settings")}>
+                    Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleSignout()}>
+                    Logout
+                  </DropdownMenuItem>
+                </>
+              ) : (
+                <>
+                  <DropdownMenuItem
+                    onClick={handleBlock}
+                    className="cursor-pointer">
+                    {isReceiverBlocked ? "Unblock" : "Block"}
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       {isSearch && (
