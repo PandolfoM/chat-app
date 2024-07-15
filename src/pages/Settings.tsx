@@ -194,12 +194,6 @@ function Settings() {
             defaultValue={currentUserDoc?.statusMsg}
             {...register("statusMsg")}
           />
-          <Label>Profile Picture</Label>
-          <Input
-            type="file"
-            placeholder="Profile Picture"
-            {...register("pfp")}
-          />
           <p className="text-sm text-error">{errors.pfp?.message}</p>
           <Button variant="filled" type="submit">
             Save
