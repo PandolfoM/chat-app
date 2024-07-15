@@ -55,35 +55,47 @@ function Login() {
   };
 
   return (
-    <form
-      className="flex flex-col gap-2 w-full h-full justify-center p-2"
-      onSubmit={handleSubmit(handleLogin)}>
-      <h1 className="text-center text-xl">Login</h1>
-      <div>
-        <Input placeholder="Email" {...register("email")} />
-        <p className="text-sm text-error">{errors.email?.message}</p>
+    <div className="flex flex-col h-full gap-14">
+      <div className="h-full flex flex-col justify-end px-5">
+        <h1 className="text-5xl font-bold">
+          Welcome to
+          <br /> Chat 👋
+        </h1>
       </div>
+      <div className="bg-backgroundSecondary rounded-t-2xl h-full">
+        <form
+          className="flex flex-col gap-2 w-full h-full p-2"
+          onSubmit={handleSubmit(handleLogin)}>
+          <h2 className="text-xl font-bold py-3 pl-3">
+            Enter your login information
+          </h2>
+          <div>
+            <Input placeholder="Email" {...register("email")} />
+            <p className="text-sm text-error">{errors.email?.message}</p>
+          </div>
 
-      <div>
-        <Input
-          placeholder="Password"
-          type="password"
-          {...register("password")}
-        />
-        <p className="text-sm text-error">{errors.password?.message}</p>
+          <div>
+            <Input
+              placeholder="Password"
+              type="password"
+              {...register("password")}
+            />
+            <p className="text-sm text-error">{errors.password?.message}</p>
+          </div>
+
+          <p className="opacity-50 text-sm pt-4 pb-12 text-center">
+            Don't have an account?{" "}
+            <a className="p-0 underline" href="/signup">
+              Create an account
+            </a>
+          </p>
+          {error && <p className="text-sm text-error">{error}</p>}
+          <Button variant="filled" className="w-full mt-4" type="submit">
+            Login
+          </Button>
+        </form>
       </div>
-
-      <p className="opacity-50 text-sm">
-        Don't have an account?{" "}
-        <a className="p-0 underline" href="/signup">
-          Create an account
-        </a>
-      </p>
-      {error && <p className="text-sm text-error">{error}</p>}
-      <Button variant="filled" className="w-full mt-4" type="submit">
-        Login
-      </Button>
-    </form>
+    </div>
   );
 }
 
