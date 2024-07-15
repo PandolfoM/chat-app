@@ -59,7 +59,7 @@ function Signup() {
   };
 
   return (
-    <div className="flex flex-col h-full gap-14">
+    <div className="flex flex-col h-full gap-10">
       <div className="h-full flex flex-col justify-end px-5">
         <h1 className="text-5xl font-bold">
           Welcome to

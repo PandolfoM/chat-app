@@ -25,7 +25,7 @@ function ProfilePicture({
         !image && location.pathname === "/chat" && "bg-primary",
         className
       )}>
-      {currentUserDoc && (
+      {(currentUserDoc || image) && (
         <>
           {location.pathname === "/chat" ? (
             <>
@@ -41,10 +41,10 @@ function ProfilePicture({
             </>
           ) : (
             <>
-              {currentUserDoc.pfp ? (
+              {currentUserDoc?.pfp || image ? (
                 <img
                   className="object-cover"
-                  src={image ? image : currentUserDoc.pfp}
+                  src={image ? image : currentUserDoc?.pfp}
                   alt={`${currentUserDoc?.username} profile picture`}
                 />
               ) : (
