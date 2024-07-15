@@ -72,7 +72,11 @@ function NavBar() {
               onClick={() => navigate(-1)}
             />
           )}
-          <ProfilePicture className="h-12 w-12" />
+          {location.pathname !== "/chat" ? (
+            <ProfilePicture className="h-12 w-12" />
+          ) : (
+            <ProfilePicture className="h-12 w-12" image={user?.pfp} />
+          )}
           <div>
             {location.pathname !== "/chat" ? (
               <h3>{currentUser?.displayName}</h3>
