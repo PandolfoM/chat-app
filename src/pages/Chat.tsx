@@ -40,8 +40,6 @@ type FormData = yup.InferType<typeof schema>;
 
 interface ChatMessage {
   text: string;
-  // name: currentUser?.displayName, //! wont update if user changes their name or pfp?
-  // avatar: currentUser?.photoURL,
   createdAt: number;
   senderId: string;
 }
@@ -51,7 +49,7 @@ interface ChatData {
 }
 
 function Chat() {
-  const { register, handleSubmit, watch, setValue } = useForm({
+  const { register, handleSubmit, watch, setValue, reset } = useForm({
     resolver: yupResolver(schema),
   });
   const { currentUser } = useContext(AuthContext);
@@ -64,7 +62,7 @@ function Chat() {
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "instant" });
-  }, []);
+  }, [chat]);
 
   useEffect(() => {
     if (!chatId) return navigate("/");
@@ -98,6 +96,9 @@ function Chat() {
           );
 
           userChatsData.chats[chatIndex].lastMessage = data.msg;
+
+          reset({ msg: "" });
+
           userChatsData.chats[chatIndex].isSeen =
             id === currentUser?.uid ? true : false;
           userChatsData.chats[chatIndex].updatedAt = Date.now();
@@ -157,7 +158,7 @@ function Chat() {
             </p>
           </div>
         ))}
-        <div ref={endRef}></div>
+        <div ref={endRef} className="py-1" />
       </section>
       <section className="m-5">
         <form
@@ -184,6 +185,7 @@ function Chat() {
                   ? "Cannot send a message"
                   : "Type message..."
               }
+              value={msgValue}
               className="bg-transparent border-l-2 rounded-none my-5 resize-none"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {

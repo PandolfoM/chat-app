@@ -1,7 +1,6 @@
 import { UserDocI } from "../auth/context";
 import { cn, formatDate, getInitials } from "../lib/utils";
 import { ChatPromiseData } from "../pages/Home";
-import { format, isToday, isYesterday } from "date-fns";
 
 type Props = {
   user: UserDocI;
