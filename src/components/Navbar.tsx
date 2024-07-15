@@ -60,6 +60,11 @@ function NavBar() {
     }
   };
 
+  const onRoute = (route: string) => {
+    setIsSearch(false);
+    navigate(`/${route}`);
+  };
+
   return (
     <nav className="flex flex-col items-center justify-between px-5 pt-5 pb-10 gap-4">
       <div className="flex items-center justify-between w-full">
@@ -87,24 +92,30 @@ function NavBar() {
           </div>
         </div>
         <div className="flex gap-5 items-center">
-          {location.pathname !== "/chat" ? (
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              onClick={() => setIsSearch(!isSearch)}
-            />
-          ) : (
-            <FontAwesomeIcon icon={faPhone} />
+          {location.pathname !== "/settings" && (
+            <>
+              {location.pathname !== "/chat" ? (
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  onClick={() => setIsSearch(!isSearch)}
+                />
+              ) : (
+                <FontAwesomeIcon icon={faPhone} />
+              )}
+            </>
           )}
           <DropdownMenu>
-            <DropdownMenuTrigger>
-              <FontAwesomeIcon icon={faEllipsisV} />
-            </DropdownMenuTrigger>
+            {location.pathname !== "/settings" && (
+              <DropdownMenuTrigger>
+                <FontAwesomeIcon icon={faEllipsisV} />
+              </DropdownMenuTrigger>
+            )}
             <DropdownMenuContent>
               {location.pathname === "/" ? (
                 <>
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => navigate("/settings")}>
+                  <DropdownMenuItem onClick={() => onRoute("settings")}>
                     Settings
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => handleSignout()}>
