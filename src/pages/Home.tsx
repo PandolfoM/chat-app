@@ -34,32 +34,32 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsub = onSnapshot(
-      doc(db, "userchats", currentUser?.uid as string),
-      async (res) => {
-        if (res.exists()) {
-          const items = res.data().chats;
-
-          const promises = items.map(async (item: ChatI) => {
-            const UserDocRef = doc(db, "users", item.receiverId);
-            const UserDocSnap = await getDoc(UserDocRef);
-
-            const user = UserDocSnap.data();
-
-            return { ...item, user };
-          });
-
-          const chatData = await Promise.all(promises);
-          setChats((prevChats) =>
-            prevChats.length === chatData.length
-              ? prevChats
-              : chatData.sort((a, b) => b.updatedAt - a.updatedAt)
-          );
+    const unsub = () => {
+      onSnapshot(
+        doc(db, "userchats", currentUser?.uid as string),
+        async (res) => {
+          if (res.exists()) {
+            const items = res.data().chats;
+            const promises = items.map(async (item: ChatI) => {
+              const UserDocRef = doc(db, "users", item.receiverId);
+              const UserDocSnap = await getDoc(UserDocRef);
+              const user = UserDocSnap.data();
+              return { ...item, user };
+            });
+            const chatData = await Promise.all(promises);
+            setChats((prevChats) =>
+              prevChats.length === chatData.length
+                ? prevChats
+                : chatData.sort((a, b) => b.updatedAt - a.updatedAt)
+            );
+          }
         }
-      }
-    );
+      );
+    };
 
-    return () => unsub();
+    if (currentUser?.uid) {
+      return () => unsub();
+    }
   }, [currentUser?.uid]);
 
   const handleSelect = async (chat: ChatPromiseData) => {
