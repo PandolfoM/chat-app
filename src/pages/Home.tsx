@@ -94,10 +94,10 @@ function Home() {
 
   return (
     <>
-      <div className="flex flex-col gap-2 relative">
+      <div className="flex flex-col gap-2 relative h-full">
         <h1 className="px-5 text-3xl font-extrabold">Chat</h1>
         {chats.length > 0 && (
-          <section className="bg-backgroundSecondary rounded-2xl p-3 mx-1">
+          <section className="bg-backgroundSecondary flex-1 rounded-t-2xl p-3">
             {/* Pinned */}
             {/* <div className="rounded-t-2xl bg-white p-3 flex flex-col gap-3">
             <h3 className="opacity-60 text-sm">

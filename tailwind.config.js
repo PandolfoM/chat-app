@@ -14,7 +14,6 @@ export default {
         secondary: "#8E39C5",
         customGrey: "#dee1e5",
         card: "#7B61FF",
-        // error: "#B3001B",
         error: "#dc3435",
         success: "#72C96E",
         warning: "#E3B23C",

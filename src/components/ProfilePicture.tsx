@@ -44,7 +44,7 @@ function ProfilePicture({
               {currentUserDoc.pfp ? (
                 <img
                   className="object-cover"
-                  src={currentUserDoc.pfp}
+                  src={image ? image : currentUserDoc.pfp}
                   alt={`${currentUserDoc?.username} profile picture`}
                 />
               ) : (

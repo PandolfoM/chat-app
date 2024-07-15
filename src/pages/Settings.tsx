@@ -16,34 +16,31 @@ import { AuthContext } from "../auth/context";
 import { doc, updateDoc } from "firebase/firestore";
 import { db, storage } from "../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { cn, getInitials } from "../lib/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import ProfilePicture from "../components/ProfilePicture";
 
-const schema = yup
-  .object({
-    status: yup
-      .string()
-      .oneOf(["online", "away", "dnd", "offline"], "Invalid status value")
-      .optional(),
-    statusMsg: yup.string().optional(),
-    pfp: yup
-      .mixed()
-      .nullable()
-      .notRequired()
-      .test("fileSize", "File size is too large", (value: any) => {
-        // Skip validation if no file is provided
-        if (!value[0]) return true;
-        return value[0].size <= 8 * 1024 * 1024; // 2 MB
-      })
-      .test("fileType", "Unsupported file format", (value: any) => {
-        // Skip validation if no file is provided
-        if (!value[0]) return true;
-        return ["image/jpeg", "image/png"].includes(value[0].type);
-      }),
-  })
-  .required();
+const schema = yup.object({
+  status: yup
+    .string()
+    .oneOf(["online", "away", "dnd", "offline"], "Invalid status value")
+    .optional(),
+  statusMsg: yup.string().optional(),
+  pfp: yup
+    .mixed()
+    .nullable()
+    .notRequired()
+    .test("fileSize", "File size is too large", (value: any) => {
+      // Skip validation if no file is provided
+      if (!value) return true;
+      return value.size <= 8 * 1024 * 1024; // 8 MB
+    })
+    .test("fileType", "Unsupported file format", (value: any) => {
+      // Skip validation if no file is provided
+      if (!value) return true;
+      return ["image/jpeg", "image/png"].includes(value.type);
+    }),
+});
 type FormData = yup.InferType<typeof schema>;
 
 function Settings() {
@@ -56,7 +53,6 @@ function Settings() {
     handleSubmit,
     control,
     setValue,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -78,8 +74,6 @@ function Settings() {
       const reader = new FileReader();
       setValue("pfp", file);
       reader.onload = () => {
-        console.log(reader.result);
-
         setImageSrc(reader.result as string);
       };
       reader.onerror = (error) => {
@@ -95,7 +89,6 @@ function Settings() {
   });
 
   const onSubmit = async (data: FormData) => {
-    console.log(data);
     setIsLoading(true);
     if (!currentUserDoc) return;
 
@@ -104,8 +97,8 @@ function Settings() {
     try {
       const updates: any = {};
 
-      if (data.pfp && data.pfp instanceof FileList && data.pfp.length > 0) {
-        const file = data.pfp[0];
+      if (data.pfp && data.pfp instanceof File) {
+        const file = data.pfp;
         const storageRef = ref(storage, `${currentUserDoc.username}-pfp`);
 
         // Convert the file to ArrayBuffer
@@ -120,7 +113,11 @@ function Settings() {
             });
 
             const downloadURL = await getDownloadURL(storageRef);
+            console.log(downloadURL);
+
             updates.pfp = downloadURL;
+            setCurrenUserDoc({ ...currentUserDoc, pfp: downloadURL });
+            setImageSrc("");
           }
         };
         reader.onerror = (error) => {
@@ -141,7 +138,6 @@ function Settings() {
         ...currentUserDoc,
         status: data.status ? data.status : currentUserDoc.status,
         statusMsg: data.statusMsg ? data.statusMsg : "",
-        pfp: updates.pfp || currentUserDoc.pfp,
       });
       await updateDoc(userRef, updates);
       setIsLoading(false);
@@ -158,21 +154,31 @@ function Settings() {
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-2 w-full h-full justify-center p-2">
-          <section className="flex justify-center">
-            <div className="relative">
-              <ProfilePicture image={imageSrc ? imageSrc : null} />
-              <span
-                className="absolute -bottom-3 -right-3 bg-white text-black w-10 h-10 aspect-square rounded-xl flex items-center justify-center cursor-pointer"
-                onClick={handleButtonClick}>
-                <FontAwesomeIcon icon={faImage} className="w-4 absolute" />
-                <Input
-                  type="file"
-                  className="hidden"
-                  onChange={handleFileChange}
-                  ref={fileInputRef}
-                />
-              </span>
+          <section className="flex flex-col justify-center gap-4">
+            <div className="flex justify-center">
+              <div className="relative">
+                <ProfilePicture image={imageSrc ? imageSrc : null} />
+                <span
+                  className="absolute -bottom-3 -right-3 bg-white text-black w-10 h-10 aspect-square rounded-xl flex items-center justify-center cursor-pointer"
+                  onClick={handleButtonClick}>
+                  <FontAwesomeIcon icon={faImage} className="w-4 absolute" />
+                  <Input
+                    type="file"
+                    className="hidden"
+                    onChange={handleFileChange}
+                    ref={fileInputRef}
+                  />
+                </span>
+              </div>
             </div>
+            {imageSrc && (
+              <Button
+                variant="ghost"
+                className="p-0 text-primary"
+                onClick={() => setImageSrc("")}>
+                Reset
+              </Button>
+            )}
           </section>
           <Label>Status</Label>
           <Select

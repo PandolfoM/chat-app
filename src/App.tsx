@@ -57,8 +57,10 @@ function App() {
           element={
             <ProtectedRoute>
               <Suspense fallback={<Spinner />}>
-                <NavBar />
-                <Home />
+                <div className="w-full h-full flex flex-col">
+                  <NavBar />
+                  <Home />
+                </div>
               </Suspense>
             </ProtectedRoute>
           }
