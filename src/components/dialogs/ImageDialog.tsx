@@ -1,12 +1,5 @@
 import { ReactNode } from "react";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogOverlay,
-  DialogTitle,
-  DialogTrigger,
-} from "./Dialog";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./Dialog";
 
 function ImageDialog({
   children,
@@ -18,9 +11,11 @@ function ImageDialog({
   return (
     <Dialog>
       <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent className="p-0 overflow-hidden bg-transparent border-0 rounded-none">
+      <DialogContent className="p-0 overflow-visible bg-transparent border-0 rounded-none max-h-full max-w-[85%]">
         <DialogTitle className="hidden">Image</DialogTitle>
-        <img src={image} alt="" className="z-50" />
+        {/* <div className="h-full"> */}
+        <img src={image} alt="" className="object-contain h-full" />
+        {/* </div> */}
       </DialogContent>
     </Dialog>
   );

@@ -220,8 +220,10 @@ function Chat() {
                 isCurrentUserBlocked || isReceiverBlocked
                   ? "blur-sm"
                   : "blur-0",
-                msg.img && !msg.text && "absolute bottom-1 right-6",
-                "text-xs opacity-60 pt-1"
+                msg.img &&
+                  !msg.text &&
+                  "absolute -bottom-1 right-6 text-black dark:text-white",
+                "text-xs opacity-60 pt-1 "
               )}>
               {formatDate(msg.createdAt)}
             </p>
