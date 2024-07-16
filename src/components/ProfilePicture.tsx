@@ -3,6 +3,8 @@ import { AuthContext } from "../auth/context";
 import { cn, getInitials } from "../lib/utils";
 import { useLocation } from "react-router-dom";
 import { ChatContext } from "../context/chatContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 function ProfilePicture({
   className,
@@ -36,7 +38,8 @@ function ProfilePicture({
                   alt={`${user?.username} profile picture`}
                 />
               ) : (
-                getInitials(user?.username as string)
+                // getInitials(user?.username as string)
+                <FontAwesomeIcon icon={faUser} size="sm" />
               )}
             </>
           ) : (
@@ -48,7 +51,8 @@ function ProfilePicture({
                   alt={`${currentUserDoc?.username} profile picture`}
                 />
               ) : (
-                getInitials(currentUserDoc?.username as string)
+                // getInitials(currentUserDoc?.username as string)
+                <FontAwesomeIcon icon={faUser} size="sm" />
               )}
             </>
           )}
