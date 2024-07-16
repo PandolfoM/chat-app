@@ -1,8 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { UserDocI } from "../auth/context";
-import { cn, formatDate, getInitials } from "../lib/utils";
+import { cn, formatDate } from "../lib/utils";
 import { ChatPromiseData } from "../pages/Home";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+import ProfilePicture from "./ProfilePicture";
 
 type Props = {
   user: UserDocI;
@@ -14,14 +15,18 @@ function User({ user, chat }: Props) {
     <div className="flex gap-3 w-full">
       <span
         className={cn(
-          `w-11 h-11 aspect-square text-white rounded-full flex items-center justify-center ring-2 ring-offset-2 ring-success`,
+          `w-12 h-12 aspect-square text-white rounded-full flex items-center justify-center ring-2 ring-offset-2 ring-success ring-opacity-60`,
           user.status === "online" && "ring-success",
           user.status === "away" && "ring-warning",
           user.status === "offline" && "ring-zinc-500",
           user.status === "dnd" && "ring-error"
         )}
-        style={{ backgroundColor: user.color }}>
-        <FontAwesomeIcon icon={faUser} size="lg" />
+        style={{ backgroundColor: user.pfp ? "transparent" : user.color }}>
+        {user.pfp ? (
+          <ProfilePicture image={user.pfp} />
+        ) : (
+          <FontAwesomeIcon icon={faUser} size="lg" />
+        )}
       </span>
       <section className="flex items-center gap-2 w-full relative">
         <div

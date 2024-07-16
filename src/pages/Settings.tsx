@@ -19,6 +19,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import ProfilePicture from "../components/ProfilePicture";
 import upload from "../lib/upload";
+import deleteFile from "../lib/deleteFile";
 
 const schema = yup.object({
   status: yup
@@ -48,13 +49,7 @@ function Settings() {
     useContext(AuthContext);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    formState: { errors },
-  } = useForm({
+  const { register, handleSubmit, control, setValue } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       status: currentUserDoc?.status,
@@ -129,6 +124,28 @@ function Settings() {
     }
   };
 
+  const removePfp = async () => {
+    if (!currentUserDoc) return;
+    setIsLoading(true);
+    const userRef = doc(db, "users", currentUserDoc.id);
+    try {
+      setImageSrc("");
+      setCurrentUserDoc({ ...currentUserDoc, pfp: "" });
+      await deleteFile("profile-pics", `${currentUserDoc.username}-pfp`);
+      await updateDoc(userRef, {
+        pfp: "",
+      });
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
+    }
+  };
+
+  const resetPfp = async () => {
+    setImageSrc("");
+  };
+
   return (
     <div className="flex flex-col gap-2 relative">
       <h1 className="px-5 text-3xl font-extrabold">Settings</h1>
@@ -139,7 +156,10 @@ function Settings() {
           <section className="flex flex-col justify-center gap-4">
             <div className="flex justify-center">
               <div className="relative">
-                <ProfilePicture image={imageSrc ? imageSrc : null} />
+                <ProfilePicture
+                  className="w-28 h-28"
+                  image={imageSrc ? imageSrc : null}
+                />
                 <span
                   className="absolute -bottom-3 -right-3 bg-white text-black w-10 h-10 aspect-square rounded-xl flex items-center justify-center cursor-pointer"
                   onClick={handleButtonClick}>
@@ -153,12 +173,12 @@ function Settings() {
                 </span>
               </div>
             </div>
-            {imageSrc && (
+            {(imageSrc || currentUserDoc?.pfp) && (
               <Button
                 variant="ghost"
-                className="p-0 text-primary"
-                onClick={() => setImageSrc("")}>
-                Reset
+                className="p-0 text-primary w-fit h-fit m-auto"
+                onClick={imageSrc ? resetPfp : removePfp}>
+                {imageSrc ? "Reset Profile Picture" : "Remove Profile Picture"}
               </Button>
             )}
           </section>

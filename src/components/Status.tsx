@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { AuthContext, UserDocI } from "../auth/context";
+import { useContext } from "react";
+import { UserDocI } from "../auth/context";
 import { useLocation } from "react-router-dom";
 import { ChatContext } from "../context/chatContext";
 import { cn } from "../lib/utils";

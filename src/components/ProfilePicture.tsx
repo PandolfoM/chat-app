@@ -22,7 +22,7 @@ function ProfilePicture({
     <div
       {...props}
       className={cn(
-        "w-20 h-20 aspect-square text-3xl text-white rounded-full flex items-center justify-center shadow-xl overflow-hidden",
+        "w-full h-full aspect-square text-3xl text-white rounded-full flex items-center justify-center shadow-xl overflow-hidden",
         currentUserDoc?.pfp ? "bg-transparent" : "bg-primary",
         !image && location.pathname === "/chat" && "bg-primary",
         className
@@ -33,7 +33,7 @@ function ProfilePicture({
             <>
               {image ? (
                 <img
-                  className="object-cover"
+                  className="object-cover h-full w-full"
                   src={image ? image : ""}
                   alt={`${user?.username} profile picture`}
                 />
@@ -46,7 +46,7 @@ function ProfilePicture({
             <>
               {currentUserDoc?.pfp || image ? (
                 <img
-                  className="object-cover"
+                  className="object-cover h-full w-full"
                   src={image ? image : currentUserDoc?.pfp}
                   alt={`${currentUserDoc?.username} profile picture`}
                 />

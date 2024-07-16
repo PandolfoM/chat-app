@@ -3,8 +3,8 @@ import { storage } from "../firebase";
 
 const upload = async (
   file: File,
-  fileName: string,
-  location: string
+  location: string,
+  fileName: string
 ): Promise<string> => {
   const storageRef = ref(storage, `${location}/` + fileName);
   const uploadTask = uploadBytesResumable(storageRef, file, {
