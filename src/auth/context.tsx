@@ -54,8 +54,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const handleBeforeUnload = async () => {
       if (currentUserDoc) {
-        console.log(currentUserDoc.status);
-
         await updateDoc(doc(db, "users", currentUserDoc.id), {
           status: "offline",
           prevStatus: currentUserDoc.status,
@@ -80,8 +78,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         ...userData,
         status: userData.prevStatus,
       });
-
-      console.log(userData);
 
       await updateDoc(doc(db, "users", userData.id), {
         status: userData.prevStatus,

@@ -105,7 +105,6 @@ function Chat() {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    console.log(file);
 
     if (file) {
       const reader = new FileReader();
@@ -121,13 +120,9 @@ function Chat() {
   };
 
   const handleSend = async (data: FormData) => {
-    console.log(data);
-
     let imgUrl = null;
     try {
       if (data.image && data.image instanceof File) {
-        console.log(data.image);
-
         imgUrl = await upload(data.image, "chatImages", Date.now().toString());
       }
 

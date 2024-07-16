@@ -42,8 +42,6 @@ export const ChatContextProvider = ({ children }: { children: ReactNode }) => {
 
     // Check if current user is blocked
     if (user.blocked.includes(currentUserDoc?.id as string)) {
-      console.log("current user blocked");
-
       setChatId(chatId);
       setUser(user);
       setIsCurrentUserBlocked(true);

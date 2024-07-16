@@ -53,7 +53,6 @@ function Login() {
       }
 
       querySnapshot.forEach((doc) => {
-        console.log(doc.data());
         setUser(doc.data() as UserDocI);
         emailForm.reset();
       });
@@ -63,7 +62,6 @@ function Login() {
   };
 
   const handleLogin = async (data: PasswordFormData) => {
-    console.log(data);
     try {
       await passwordSchema.validate(data, { abortEarly: false });
 
