@@ -5,7 +5,8 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 export interface UserDocI {
   email: string;
-  username: string;
+  username?: string;
+  lowercaseUsername?: string;
   id: string;
   blocked: string[];
   status: "online" | "offline" | "away" | "dnd";

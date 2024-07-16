@@ -23,10 +23,10 @@ function Signup() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
   const { setCurrentUser } = useContext(AuthContext);
-  const [error, setError] = useState<string>("");
   const navigate = useNavigate();
 
   const handleSignup = async (data: FormData) => {
@@ -41,6 +41,7 @@ function Signup() {
         email: data.email,
         id: res.user.uid,
         status: "online",
+        prevStatus: "online",
         statusMsg: "",
         blocked: [],
         color: getProfileColor(),
@@ -53,8 +54,17 @@ function Signup() {
       setCurrentUser(res.user);
       navigate("/registername");
     } catch (err: any) {
-      console.log(err);
-      setError(err.message);
+      console.log(err.message);
+      switch (err.message) {
+        case "Firebase: Error (auth/email-already-in-use).":
+          console.log(err.message);
+
+          setError("root", { message: "Email already in use" });
+          break;
+        default:
+          setError("root", { message: err.message });
+          break;
+      }
     }
   };
 
@@ -91,7 +101,9 @@ function Signup() {
               Login
             </a>
           </p>
-          {error && <p className="text-sm text-error">{error}</p>}
+          {errors.root?.message && (
+            <p className="text-sm text-error">{errors.root?.message}</p>
+          )}
           <Button variant="filled" className="w-full mt-4" type="submit">
             Create Account
           </Button>

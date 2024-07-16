@@ -34,8 +34,15 @@ function NewChatDialog({ children }: { children: ReactNode }) {
 
   const handleSearch = async (data: FormData) => {
     try {
+      if (data.username.toLowerCase() === currentUserDoc?.lowercaseUsername) {
+        return;
+      }
+
       const userRef = collection(db, "users");
-      const q = query(userRef, where("username", "==", data.username));
+      const q = query(
+        userRef,
+        where("lowercaseUsername", "==", data.username.toLowerCase())
+      );
 
       const querySnapShot = await getDocs(q);
 

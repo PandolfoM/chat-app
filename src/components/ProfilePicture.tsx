@@ -39,7 +39,11 @@ function ProfilePicture({
                 />
               ) : (
                 // getInitials(user?.username as string)
-                <FontAwesomeIcon icon={faUser} size="sm" />
+                <FontAwesomeIcon
+                  icon={faUser}
+                  size="sm"
+                  className="h-1/2 w-1/2"
+                />
               )}
             </>
           ) : (
@@ -52,7 +56,11 @@ function ProfilePicture({
                 />
               ) : (
                 // getInitials(currentUserDoc?.username as string)
-                <FontAwesomeIcon icon={faUser} size="sm" />
+                <FontAwesomeIcon
+                  icon={faUser}
+                  size="sm"
+                  className="h-1/2 w-1/2"
+                />
               )}
             </>
           )}

@@ -10,6 +10,7 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { collection, doc, getDocs, query, where } from "firebase/firestore";
 import ProfilePicture from "../components/ProfilePicture";
+import CONFIG from "../config";
 
 const emailSchema = yup
   .object({
@@ -103,7 +104,7 @@ function Login() {
           ) : (
             <>
               Welcome to
-              <br /> Chat 👋
+              <br /> {CONFIG.appName} 👋
             </>
           )}
         </h1>
@@ -111,62 +112,68 @@ function Login() {
       </div>
       <div className="bg-backgroundSecondary rounded-t-2xl h-full">
         <form
-          className="flex flex-col gap-2 w-full h-full p-2"
+          className="flex flex-col gap-2 w-full h-full p-2 pb-10 justify-between"
           onSubmit={
             user
               ? passwordForm.handleSubmit(handleLogin)
               : emailForm.handleSubmit(getUser)
           }>
-          <h2 className="text-xl font-bold py-3 pl-3">
-            {user ? "Enter your password" : "Enter your email"}
-          </h2>
-          {user ? (
-            <div>
-              <Input
-                placeholder="Password"
-                type="password"
-                {...passwordForm.register("password")}
-              />
-              <p className="text-sm text-error">
-                {passwordForm.formState.errors.password?.message}
-              </p>
-            </div>
-          ) : (
-            <div>
-              <Input placeholder="Email" {...emailForm.register("email")} />
-              <p className="text-sm text-error">
-                {emailForm.formState.errors.email?.message}
-              </p>
-            </div>
-          )}
+          <div>
+            <h2 className="text-xl font-bold py-3 pl-3">
+              {user ? "Enter your password" : "Enter your email"}
+            </h2>
+            {user ? (
+              <div>
+                <Input
+                  placeholder="Password"
+                  type="password"
+                  {...passwordForm.register("password")}
+                />
+                <p className="text-sm text-error">
+                  {passwordForm.formState.errors.password?.message}
+                </p>
+              </div>
+            ) : (
+              <div>
+                <Input placeholder="Email" {...emailForm.register("email")} />
+                <p className="text-sm text-error">
+                  {emailForm.formState.errors.email?.message}
+                </p>
+              </div>
+            )}
 
-          {emailForm.formState.errors.root?.message && (
-            <p className="text-sm text-error">
-              {emailForm.formState.errors.root?.message}
-            </p>
-          )}
+            {emailForm.formState.errors.root?.message && (
+              <p className="text-sm text-error">
+                {emailForm.formState.errors.root?.message}
+              </p>
+            )}
 
-          <p className="opacity-50 text-sm pt-4 pb-12 text-center">
-            Don't have an account?{" "}
-            <a className="p-0 underline" href="/signup">
-              Create an account
-            </a>
-          </p>
-          {error && <p className="text-sm text-error">{error}</p>}
-          <Button
-            variant="filled"
-            className="w-full mt-4 shadow-xl"
-            type="submit">
-            Continue
-          </Button>
-          {user && (
+            {!user && (
+              <p className="opacity-50 text-sm pt-8 pb-12 text-center">
+                Don't have an account?{" "}
+                <a className="p-0 underline" href="/signup">
+                  Create an account
+                </a>
+              </p>
+            )}
+            {error && <p className="text-sm text-error">{error}</p>}
+          </div>
+          <div>
             <Button
               variant="filled"
-              className="w-full mt-2 bg-white text-black shadow-xl"
-              onClick={() => setUser(null)}>
-              Back
+              className="w-full mt-4 shadow-xl"
+              type="submit">
+              Continue
             </Button>
-          )}
+            {user && (
+              <Button
+                variant="filled"
+                className="w-full mt-2 bg-white text-black shadow-xl"
+                onClick={() => setUser(null)}>
+                Back
+              </Button>
+            )}
+          </div>
         </form>
       </div>
     </div>
