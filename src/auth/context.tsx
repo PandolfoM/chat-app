@@ -18,7 +18,7 @@ type AuthContextType = {
   currentUser: User | null;
   setCurrentUser: React.Dispatch<React.SetStateAction<User | null>>;
   currentUserDoc: UserDocI | null;
-  setCurrenUserDoc: React.Dispatch<React.SetStateAction<UserDocI | null>>;
+  setCurrentUserDoc: React.Dispatch<React.SetStateAction<UserDocI | null>>;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -27,14 +27,14 @@ export const AuthContext = createContext<AuthContextType>({
   currentUser: null,
   setCurrentUser: () => {},
   currentUserDoc: null,
-  setCurrenUserDoc: () => {},
+  setCurrentUserDoc: () => {},
   isLoading: true,
   setIsLoading: () => {},
 });
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [currentUserDoc, setCurrenUserDoc] = useState<UserDocI | null>(null);
+  const [currentUserDoc, setCurrentUserDoc] = useState<UserDocI | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     const userDoc = await getDoc(doc(db, "users", user.uid));
 
     if (userDoc.exists()) {
-      setCurrenUserDoc(userDoc.data() as UserDocI);
+      setCurrentUserDoc(userDoc.data() as UserDocI);
       setIsLoading(false);
     } else {
       setIsLoading(false);
@@ -67,7 +67,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         currentUser,
         setCurrentUser,
         currentUserDoc,
-        setCurrenUserDoc,
+        setCurrentUserDoc,
         isLoading,
         setIsLoading,
       }}>

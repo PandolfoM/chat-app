@@ -14,11 +14,11 @@ import Button from "../components/Button";
 import { useContext, useRef, useState } from "react";
 import { AuthContext } from "../auth/context";
 import { doc, updateDoc } from "firebase/firestore";
-import { db, storage } from "../firebase";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { db } from "../firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import ProfilePicture from "../components/ProfilePicture";
+import upload from "../lib/upload";
 
 const schema = yup.object({
   status: yup
@@ -44,7 +44,7 @@ const schema = yup.object({
 type FormData = yup.InferType<typeof schema>;
 
 function Settings() {
-  const { currentUserDoc, setCurrenUserDoc, setIsLoading } =
+  const { currentUserDoc, setCurrentUserDoc, setIsLoading } =
     useContext(AuthContext);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -98,35 +98,13 @@ function Settings() {
       const updates: any = {};
 
       if (data.pfp && data.pfp instanceof File) {
-        const file = data.pfp;
-        const storageRef = ref(
-          storage,
-          `profile-pics/${currentUserDoc.username}-pfp`
+        const imgUrl = await upload(
+          data.pfp,
+          "profile-pics",
+          `${currentUserDoc.username}-pfp`
         );
-
-        // Convert the file to ArrayBuffer
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-          if (e.target) {
-            const arrayBuffer = e.target.result as ArrayBuffer;
-
-            // Upload the ArrayBuffer
-            await uploadBytes(storageRef, arrayBuffer, {
-              contentType: file.type,
-            });
-
-            const downloadURL = await getDownloadURL(storageRef);
-            console.log(downloadURL);
-
-            updates.pfp = downloadURL;
-            setCurrenUserDoc({ ...currentUserDoc, pfp: downloadURL });
-            setImageSrc("");
-          }
-        };
-        reader.onerror = (error) => {
-          console.error("Error reading file:", error);
-        };
-        reader.readAsArrayBuffer(file);
+        updates.pfp = imgUrl;
+        setImageSrc("");
       }
 
       // Conditionally add the status field if it has changed
@@ -137,10 +115,11 @@ function Settings() {
       // Always add the statusMsg field
       updates.statusMsg = data.statusMsg || "";
 
-      setCurrenUserDoc({
+      setCurrentUserDoc({
         ...currentUserDoc,
         status: data.status ? data.status : currentUserDoc.status,
         statusMsg: data.statusMsg ? data.statusMsg : "",
+        pfp: updates.pfp,
       });
       await updateDoc(userRef, updates);
       setIsLoading(false);

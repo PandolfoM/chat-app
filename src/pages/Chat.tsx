@@ -34,6 +34,20 @@ import {
 const schema = yup
   .object({
     msg: yup.string().required(),
+    image: yup
+      .mixed()
+      .nullable()
+      .notRequired()
+      .test("fileSize", "File size is too large", (value: any) => {
+        // Skip validation if no file is provided
+        if (!value) return true;
+        return value.size <= 8 * 1024 * 1024; // 8 MB
+      })
+      .test("fileType", "Unsupported file format", (value: any) => {
+        // Skip validation if no file is provided
+        if (!value) return true;
+        return ["image/jpeg", "image/png"].includes(value.type);
+      }),
   })
   .required();
 type FormData = yup.InferType<typeof schema>;
