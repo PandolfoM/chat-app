@@ -182,7 +182,6 @@ function Settings() {
             defaultValue={currentUserDoc?.statusMsg}
             {...register("statusMsg")}
           />
-          <p className="text-sm text-error">{errors.pfp?.message}</p>
           <Button variant="filled" type="submit">
             Save
           </Button>

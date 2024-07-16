@@ -5,6 +5,7 @@ import {
   faImage,
   faMicrophone,
   faPlus,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { Textarea } from "../components/Textarea";
 import * as yup from "yup";
@@ -30,10 +31,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/Dropdown";
+import { Input } from "../components/Input";
+import upload from "../lib/upload";
 
 const schema = yup
   .object({
-    msg: yup.string().required(),
+    msg: yup.string().optional(),
     image: yup
       .mixed()
       .nullable()
@@ -56,6 +59,7 @@ interface ChatMessage {
   text: string;
   createdAt: number;
   senderId: string;
+  img: string;
 }
 interface ChatData {
   createdAt: Date;
@@ -68,8 +72,12 @@ function Chat() {
   });
   const { currentUser } = useContext(AuthContext);
   const msgValue = watch("msg");
+  const imgValue = watch("image");
   const endRef = useRef<HTMLDivElement>(null);
   const [chat, setChat] = useState<ChatData | null>(null);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
   const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } =
     useContext(ChatContext);
   const navigate = useNavigate();
@@ -88,13 +96,46 @@ function Chat() {
     return () => unsub();
   }, [chatId]);
 
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    console.log(file);
+
+    if (file) {
+      const reader = new FileReader();
+      setValue("image", file);
+      reader.onload = () => {
+        setImageSrc(reader.result as string);
+      };
+      reader.onerror = (error) => {
+        console.error("Error reading file:", error);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSend = async (data: FormData) => {
+    console.log(data);
+
+    let imgUrl = null;
     try {
+      if (data.image && data.image instanceof File) {
+        console.log(data.image);
+
+        imgUrl = await upload(data.image, "chatImages", Date.now().toString());
+      }
+
       await updateDoc(doc(db, "chats", chatId), {
         messages: arrayUnion({
           senderId: currentUser?.uid,
-          text: data.msg,
+          text: data.msg ? data.msg : "",
           createdAt: Date.now(),
+          ...(imgUrl && { img: imgUrl }),
         }),
       });
 
@@ -111,7 +152,8 @@ function Chat() {
 
           userChatsData.chats[chatIndex].lastMessage = data.msg;
 
-          reset({ msg: "" });
+          reset();
+          setImageSrc(null);
 
           userChatsData.chats[chatIndex].isSeen =
             id === currentUser?.uid ? true : false;
@@ -152,20 +194,35 @@ function Chat() {
               currentUser?.uid === msg.senderId
                 ? "bg-primary self-end text-white"
                 : "bg-white text-black",
-              "w-fit max-w-[75%] px-3 py-1 rounded-2xl"
+              msg.img && !msg.text && "bg-transparent",
+              "w-fit max-w-[75%] px-3 py-1 rounded-2xl relative"
             )}>
-            <p
-              className={cn(
-                isCurrentUserBlocked || isReceiverBlocked ? "blur-sm" : "blur-0"
-              )}>
-              {msg.text}
-            </p>
+            <div>
+              {msg.img && (
+                <img
+                  src={msg.img}
+                  alt=""
+                  className="max-h-60 object-cover rounded-2xl"
+                />
+              )}
+              {msg.text && (
+                <p
+                  className={cn(
+                    isCurrentUserBlocked || isReceiverBlocked
+                      ? "blur-sm"
+                      : "blur-0"
+                  )}>
+                  {msg.text}
+                </p>
+              )}
+            </div>
             <p
               className={cn(
                 currentUser?.uid === msg.senderId ? "text-right" : "text-left ",
                 isCurrentUserBlocked || isReceiverBlocked
                   ? "blur-sm"
                   : "blur-0",
+                msg.img && !msg.text && "absolute bottom-0 right-4",
                 "text-xs opacity-60 pt-1"
               )}>
               {formatDate(msg.createdAt)}
@@ -174,21 +231,42 @@ function Chat() {
         ))}
         <div ref={endRef} className="py-1" />
       </section>
-      <section className="m-5">
+      <section className="m-5 flex flex-col gap-2">
+        {imageSrc && (
+          <div className="group w-fit relative bg-red-500">
+            <img src={imageSrc} alt="" className="z-10 max-h-40 w-fit " />
+            <FontAwesomeIcon
+              icon={faX}
+              className="absolute top-0 left-0 bg-background rounded-full w-3 h-3 p-2 m-1 font-bold cursor-pointer"
+              onClick={() => {
+                setImageSrc(null), reset({ image: null });
+              }}
+            />
+          </div>
+        )}
         <form
           className="bg-backgroundSecondary flex items-center gap-3 rounded-2xl px-5"
           onSubmit={handleSubmit(handleSend)}>
-          <DropdownMenu>
+          <DropdownMenu open={isOpen}>
             <DropdownMenuTrigger
+              onClick={() => setIsOpen(!isOpen)}
               disabled={isCurrentUserBlocked || isReceiverBlocked}>
               <FontAwesomeIcon icon={faPlus} />
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent onInteractOutside={() => setIsOpen(false)}>
               <DropdownMenuItem className="flex gap-2">
                 <FontAwesomeIcon icon={faCamera} /> Camera
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex gap-2">
+              <DropdownMenuItem
+                className="flex gap-2"
+                onClick={handleButtonClick}>
                 <FontAwesomeIcon icon={faImage} /> Photos
+                <Input
+                  type="file"
+                  className="hidden"
+                  onChange={handleFileChange}
+                  ref={fileInputRef}
+                />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -217,7 +295,7 @@ function Chat() {
               })}
             />
           </div>
-          {msgValue ? (
+          {msgValue || imgValue ? (
             <Button
               variant="ghost"
               type="submit"
