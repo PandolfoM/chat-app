@@ -30,7 +30,8 @@ function NavBar() {
   const navigate = useNavigate();
   const { search, setSearch } = useContext(AppContext);
   const [isSearch, setIsSearch] = useState<boolean>(false);
-  const { currentUser, setCurrentUser } = useContext(AuthContext);
+  const { currentUser, setCurrentUser, currentUserDoc } =
+    useContext(AuthContext);
   const { user, changeBlock, isReceiverBlocked, isCurrentUserBlocked } =
     useContext(ChatContext);
 
@@ -83,11 +84,16 @@ function NavBar() {
           )}
           <div>
             {location.pathname !== "/chat" ? (
-              <h3>{currentUser?.displayName}</h3>
+              <>
+                <h3>{currentUser?.displayName}</h3>
+                {currentUserDoc && <Status user={currentUserDoc} />}
+              </>
             ) : (
-              <h3>{user?.username}</h3>
+              <>
+                <h3>{user?.username}</h3>
+                {user && <Status user={user} />}
+              </>
             )}
-            <Status />
           </div>
         </div>
         <div className="flex gap-5 items-center">

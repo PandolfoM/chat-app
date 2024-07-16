@@ -1,12 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../auth/context";
+import { AuthContext, UserDocI } from "../auth/context";
 import { useLocation } from "react-router-dom";
 import { ChatContext } from "../context/chatContext";
 import { cn } from "../lib/utils";
 
-function Status() {
+function Status({ user }: { user: UserDocI }) {
   const location = useLocation();
-  const { currentUserDoc } = useContext(AuthContext);
   const { isCurrentUserBlocked, isReceiverBlocked } = useContext(ChatContext);
 
   return (
@@ -15,22 +14,22 @@ function Status() {
         <div className="text-xs flex items-center gap-1">
           <div
             className={cn(
-              currentUserDoc?.status === "online"
+              user?.status === "online"
                 ? "bg-success"
-                : currentUserDoc?.status === "offline"
+                : user?.status === "offline"
                 ? "bg-zinc-500"
-                : currentUserDoc?.status === "away"
+                : user?.status === "away"
                 ? "bg-warning"
                 : "bg-error",
               "w-3 h-3 aspect-square rounded-full"
             )}
           />
-          <p className={cn(currentUserDoc?.status && "capitalize")}>
-            {currentUserDoc?.status === "dnd"
+          <p className={cn(user?.status && "capitalize")}>
+            {user?.status === "dnd"
               ? "Do Not Disturb"
-              : currentUserDoc?.status
-              ? currentUserDoc.status
-              : currentUserDoc?.statusMsg}
+              : user?.status
+              ? user.status
+              : user?.statusMsg}
           </p>
         </div>
       ) : (
@@ -40,11 +39,27 @@ function Status() {
             className={cn(
               isCurrentUserBlocked || isReceiverBlocked
                 ? "bg-zinc-500"
-                : "bg-success",
+                : user?.status === "online"
+                ? "bg-success"
+                : user?.status === "offline"
+                ? "bg-zinc-500"
+                : user?.status === "away"
+                ? "bg-warning"
+                : "bg-error",
               "w-3 h-3 aspect-square rounded-full"
             )}
           />
-          {isCurrentUserBlocked || isReceiverBlocked ? "Offline" : "Online"}
+          {isCurrentUserBlocked || isReceiverBlocked ? (
+            "Offline"
+          ) : (
+            <p className={cn(user?.status && "capitalize")}>
+              {user?.status === "dnd"
+                ? "Do Not Disturb"
+                : user?.status
+                ? user.status
+                : user?.statusMsg}
+            </p>
+          )}
         </div>
       )}
     </>

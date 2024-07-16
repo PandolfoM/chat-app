@@ -1,7 +1,7 @@
 import { onAuthStateChanged, User } from "firebase/auth";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { auth, db } from "../firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 export interface UserDocI {
   email: string;
@@ -9,6 +9,7 @@ export interface UserDocI {
   id: string;
   blocked: string[];
   status: "online" | "offline" | "away" | "dnd";
+  prevStatus: "online" | "offline" | "away" | "dnd";
   statusMsg: string;
   pfp: string;
   color: "#3e66fb" | "#dc3435" | "#72C96E" | "#E3B23C" | "#71717A";
@@ -50,11 +51,41 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     return () => unsub();
   }, []);
 
+  useEffect(() => {
+    const handleBeforeUnload = async () => {
+      if (currentUserDoc) {
+        console.log(currentUserDoc.status);
+
+        await updateDoc(doc(db, "users", currentUserDoc.id), {
+          status: "offline",
+          prevStatus: currentUserDoc.status,
+        });
+        return;
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [currentUserDoc]);
+
   const getUserDoc = async (user: User) => {
     const userDoc = await getDoc(doc(db, "users", user.uid));
 
     if (userDoc.exists()) {
-      setCurrentUserDoc(userDoc.data() as UserDocI);
+      const userData = userDoc.data() as UserDocI;
+      setCurrentUserDoc({
+        ...userData,
+        status: userData.prevStatus,
+      });
+
+      console.log(userData);
+
+      await updateDoc(doc(db, "users", userData.id), {
+        status: userData.prevStatus,
+      });
       setIsLoading(false);
     } else {
       setIsLoading(false);
