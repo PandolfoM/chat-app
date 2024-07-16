@@ -33,6 +33,7 @@ import {
 } from "../components/Dropdown";
 import { Input } from "../components/Input";
 import upload from "../lib/upload";
+import ImageDialog from "../components/dialogs/ImageDialog";
 
 const schema = yup
   .object({
@@ -199,11 +200,13 @@ function Chat() {
             )}>
             <div>
               {msg.img && (
-                <img
-                  src={msg.img}
-                  alt=""
-                  className="max-h-60 object-cover rounded-2xl"
-                />
+                <ImageDialog image={msg.img}>
+                  <img
+                    src={msg.img}
+                    alt=""
+                    className="max-h-60 object-cover rounded-2xl"
+                  />
+                </ImageDialog>
               )}
               {msg.text && (
                 <p
@@ -222,7 +225,7 @@ function Chat() {
                 isCurrentUserBlocked || isReceiverBlocked
                   ? "blur-sm"
                   : "blur-0",
-                msg.img && !msg.text && "absolute bottom-0 right-4",
+                msg.img && !msg.text && "absolute bottom-1 right-6",
                 "text-xs opacity-60 pt-1"
               )}>
               {formatDate(msg.createdAt)}
