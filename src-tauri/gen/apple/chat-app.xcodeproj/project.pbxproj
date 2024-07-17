@@ -37,9 +37,9 @@
 		C4147EF5CC38D0D1B374D20F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		D2652B897260AF8D4021C8CE /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DFC45DD93AD5509199281311 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		E698A9C560916994632C1CFE /* chat-app_iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "chat-app_iOS.entitlements"; sourceTree = "<group>"; };
+		E698A9C560916994632C1CFE /* banter_iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "banter_iOS.entitlements"; sourceTree = "<group>"; };
 		E6FA10ECDDEE65FADEE3B02C /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		F07F5596B00C5FE19142C2CF /* chat-app_iOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "chat-app_iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F07F5596B00C5FE19142C2CF /* banter_iOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "banter_iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,13 +61,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		36187E419202BF70DD9B8138 /* chat-app_iOS */ = {
+		36187E419202BF70DD9B8138 /* banter_iOS */ = {
 			isa = PBXGroup;
 			children = (
-				E698A9C560916994632C1CFE /* chat-app_iOS.entitlements */,
+				E698A9C560916994632C1CFE /* banter_iOS.entitlements */,
 				BE1758A906E84B7BFC9FADD1 /* Info.plist */,
 			);
-			path = "chat-app_iOS";
+			path = "banter_iOS";
 			sourceTree = "<group>";
 		};
 		3A201B7EE824FB005F14B4EE /* Frameworks */ = {
@@ -106,7 +106,7 @@
 		C0D27A0AB8F595936507DB45 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F07F5596B00C5FE19142C2CF /* chat-app_iOS.app */,
+				F07F5596B00C5FE19142C2CF /* banter_iOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -121,18 +121,18 @@
 		C59FA33B73BA3120ED0412CD /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				D3A033D3E56325B3C6DA3AAE /* chat-app */,
+				D3A033D3E56325B3C6DA3AAE /* banter */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
 		};
-		D3A033D3E56325B3C6DA3AAE /* chat-app */ = {
+		D3A033D3E56325B3C6DA3AAE /* banter */ = {
 			isa = PBXGroup;
 			children = (
 				8A38BF5D3EDE712299300241 /* main.mm */,
 				7836265F3D63551E8B52453C /* bindings */,
 			);
-			path = "chat-app";
+			path = "banter";
 			sourceTree = "<group>";
 		};
 		D5DD59769CC6B076612D69C7 = {
@@ -141,7 +141,7 @@
 				8F7B4A810398C4D3F708EDB7 /* assets */,
 				DFC45DD93AD5509199281311 /* Assets.xcassets */,
 				AF3251C2AD547618712655DF /* LaunchScreen.storyboard */,
-				36187E419202BF70DD9B8138 /* chat-app_iOS */,
+				36187E419202BF70DD9B8138 /* banter_iOS */,
 				C4FE6BFB1DFB873A3D368A1F /* Externals */,
 				C59FA33B73BA3120ED0412CD /* Sources */,
 				87B540DFC5200AEA9A22FFFC /* src */,
@@ -153,9 +153,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D0CAC8D8A840D84BD839A383 /* chat-app_iOS */ = {
+		D0CAC8D8A840D84BD839A383 /* banter_iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DAB07717982A0E64564608E3 /* Build configuration list for PBXNativeTarget "chat-app_iOS" */;
+			buildConfigurationList = DAB07717982A0E64564608E3 /* Build configuration list for PBXNativeTarget "banter_iOS" */;
 			buildPhases = (
 				611B2B3C734D8034EB82A007 /* Build Rust Code */,
 				6C4818FE89A746312CE41AFE /* Sources */,
@@ -166,9 +166,9 @@
 			);
 			dependencies = (
 			);
-			name = "chat-app_iOS";
-			productName = "chat-app_iOS";
-			productReference = F07F5596B00C5FE19142C2CF /* chat-app_iOS.app */;
+			name = "banter_iOS";
+			productName = "banter_iOS";
+			productReference = F07F5596B00C5FE19142C2CF /* banter_iOS.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -185,7 +185,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 0BB112AE9012A15A9647294C /* Build configuration list for PBXProject "chat-app" */;
+			buildConfigurationList = 0BB112AE9012A15A9647294C /* Build configuration list for PBXProject "banter" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -197,7 +197,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D0CAC8D8A840D84BD839A383 /* chat-app_iOS */,
+				D0CAC8D8A840D84BD839A383 /* banter_iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -324,7 +324,7 @@
 					"arm64-sim",
 				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "chat-app_iOS/chat-app_iOS.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "banter_iOS/banter_iOS.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = GA927JBMYY;
 				ENABLE_BITCODE = NO;
@@ -334,7 +334,7 @@
 					"$(inherited)",
 					"\".\"",
 				);
-				INFOPLIST_FILE = "chat-app_iOS/Info.plist";
+				INFOPLIST_FILE = "banter_iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -343,7 +343,7 @@
 				"LIBRARY_SEARCH_PATHS[arch=arm64]" = "$(inherited) $(PROJECT_DIR)/Externals/arm64/$(CONFIGURATION) $(SDKROOT)/usr/lib/swift $(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME) $(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)";
 				"LIBRARY_SEARCH_PATHS[arch=x86_64]" = "$(inherited) $(PROJECT_DIR)/Externals/x86_64/$(CONFIGURATION) $(SDKROOT)/usr/lib/swift $(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME) $(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tauri.dev;
-				PRODUCT_NAME = "chat-app";
+				PRODUCT_NAME = "banter";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64  arm64-sim";
@@ -415,7 +415,7 @@
 					"arm64-sim",
 				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "chat-app_iOS/chat-app_iOS.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "banter_iOS/banter_iOS.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = GA927JBMYY;
 				ENABLE_BITCODE = NO;
@@ -425,7 +425,7 @@
 					"$(inherited)",
 					"\".\"",
 				);
-				INFOPLIST_FILE = "chat-app_iOS/Info.plist";
+				INFOPLIST_FILE = "banter_iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -434,7 +434,7 @@
 				"LIBRARY_SEARCH_PATHS[arch=arm64]" = "$(inherited) $(PROJECT_DIR)/Externals/arm64/$(CONFIGURATION) $(SDKROOT)/usr/lib/swift $(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME) $(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)";
 				"LIBRARY_SEARCH_PATHS[arch=x86_64]" = "$(inherited) $(PROJECT_DIR)/Externals/x86_64/$(CONFIGURATION) $(SDKROOT)/usr/lib/swift $(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME) $(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tauri.dev;
-				PRODUCT_NAME = "chat-app";
+				PRODUCT_NAME = "banter";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64  arm64-sim";
@@ -444,7 +444,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0BB112AE9012A15A9647294C /* Build configuration list for PBXProject "chat-app" */ = {
+		0BB112AE9012A15A9647294C /* Build configuration list for PBXProject "banter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0860BE1F211E34675A1BBC28 /* debug */,
@@ -453,7 +453,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = debug;
 		};
-		DAB07717982A0E64564608E3 /* Build configuration list for PBXNativeTarget "chat-app_iOS" */ = {
+		DAB07717982A0E64564608E3 /* Build configuration list for PBXNativeTarget "banter_iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				674C718C2A6320FD41F5EDC6 /* debug */,

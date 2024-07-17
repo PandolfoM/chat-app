@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D0CAC8D8A840D84BD839A383"
-               BuildableName = "chat-app_iOS.app"
-               BlueprintName = "chat-app_iOS"
-               ReferencedContainer = "container:chat-app.xcodeproj">
+               BuildableName = "banter_iOS.app"
+               BlueprintName = "banter_iOS"
+               ReferencedContainer = "container:banter.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D0CAC8D8A840D84BD839A383"
-            BuildableName = "chat-app_iOS.app"
-            BlueprintName = "chat-app_iOS"
-            ReferencedContainer = "container:chat-app.xcodeproj">
+            BuildableName = "banter_iOS.app"
+            BlueprintName = "banter_iOS"
+            ReferencedContainer = "container:banter.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -70,9 +70,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D0CAC8D8A840D84BD839A383"
-            BuildableName = "chat-app_iOS.app"
-            BlueprintName = "chat-app_iOS"
-            ReferencedContainer = "container:chat-app.xcodeproj">
+            BuildableName = "banter_iOS.app"
+            BlueprintName = "banter_iOS"
+            ReferencedContainer = "container:banter.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -101,9 +101,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D0CAC8D8A840D84BD839A383"
-            BuildableName = "chat-app_iOS.app"
-            BlueprintName = "chat-app_iOS"
-            ReferencedContainer = "container:chat-app.xcodeproj">
+            BuildableName = "banter_iOS.app"
+            BlueprintName = "banter_iOS"
+            ReferencedContainer = "container:banter.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>

@@ -1,13 +1,13 @@
 # Uncomment the next line to define a global platform for your project
 
-target 'chat-app_iOS' do
+target 'banter_iOS' do
 platform :ios, '13.0'
-  # Pods for chat-app_iOS
+  # Pods for banter_iOS
 end
 
-target 'chat-app_macOS' do
+target 'banter_macOS' do
 platform :osx, '11.0'
-  # Pods for chat-app_macOS
+  # Pods for banter_macOS
 end
 
 # Delete the deployment target for iOS and macOS, causing it to be inherited from the Podfile
