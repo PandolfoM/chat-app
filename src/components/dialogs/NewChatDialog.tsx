@@ -102,6 +102,8 @@ function NewChatDialog({ children }: { children: ReactNode }) {
       <DialogContent className="px-3 flex flex-col max-h-[80%]">
         <DialogTitle>New Chat</DialogTitle>
         <form
+          autoComplete="off"
+          autoCapitalize="off"
           onSubmit={handleSubmit(handleSearch)}
           className="flex flex-col gap-4 items-center w-full h-full m-auto overflow-hidden">
           <Input

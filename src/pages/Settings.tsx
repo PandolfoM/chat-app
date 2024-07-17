@@ -151,6 +151,8 @@ function Settings() {
       <h1 className="px-5 text-3xl font-extrabold">Settings</h1>
       <section className="bg-backgroundSecondary rounded-2xl p-3 mx-1">
         <form
+          autoComplete="off"
+          autoCapitalize="off"
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-2 w-full h-full justify-center p-2">
           <section className="flex flex-col justify-center gap-4">

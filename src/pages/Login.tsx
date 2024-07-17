@@ -112,6 +112,8 @@ function Login() {
       </div>
       <div className="bg-backgroundSecondary rounded-t-2xl h-full">
         <form
+          autoComplete="off"
+          autoCapitalize="off"
           className="flex flex-col gap-2 w-full h-full p-2 pb-10 justify-between"
           onSubmit={
             user

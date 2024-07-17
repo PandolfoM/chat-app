@@ -78,6 +78,8 @@ function Signup() {
       </div>
       <div className="bg-backgroundSecondary rounded-t-2xl h-full">
         <form
+          autoComplete="off"
+          autoCapitalize="off"
           className="flex flex-col gap-2 w-full h-full p-2"
           onSubmit={handleSubmit(handleSignup)}>
           <h2 className="text-xl font-bold py-3 pl-3">Create Account</h2>
