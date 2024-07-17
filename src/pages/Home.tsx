@@ -8,6 +8,7 @@ import { NewChatDialog } from "../components/dialogs";
 import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "../components/Tabs";
 import Chats from "./HomePages/Chats";
+import Friends from "./HomePages/Friends";
 
 enum Page {
   Chats = "chats",
@@ -20,7 +21,7 @@ function Home() {
   return (
     <>
       <div className="flex flex-col gap-2 relative h-full">
-        <>{page === Page.Chats ? <Chats /> : <div>friends</div>}</>
+        <>{page === Page.Chats ? <Chats /> : <Friends />}</>
         <section className="fixed right-1/2 translate-x-1/2 flex flex-col items-end bottom-5 w-[90%] gap-3">
           <NewChatDialog>
             <div className="rounded-full text-sm text-white disabled:bg-opacity-30 disabled:opacity-60 bg-primary flex items-center gap-2 w-fit py-4 px-7">

@@ -84,10 +84,11 @@ function Chats() {
   return (
     <>
       <h1 className="px-5 text-3xl font-extrabold">Chat</h1>
-      {chats.length > 0 && (
-        <section className="bg-backgroundSecondary flex-1 rounded-t-2xl p-3">
-          {/* Pinned */}
-          {/* <div className="rounded-t-2xl bg-white p-3 flex flex-col gap-3">
+      <section className="bg-backgroundSecondary flex-1 rounded-t-2xl p-3">
+        {chats.length > 0 && (
+          <>
+            {/* Pinned */}
+            {/* <div className="rounded-t-2xl bg-white p-3 flex flex-col gap-3">
             <h3 className="opacity-60 text-sm">
               <FontAwesomeIcon icon={faThumbTack} /> Pinned
             </h3>
@@ -98,10 +99,11 @@ function Chats() {
               <User />
             </div>
           </div> */}
-          {/* Chats */}
-          <ChatList chats={filteredChats} handleSelect={handleSelect} />
-        </section>
-      )}
+            {/* Chats */}
+            <ChatList chats={filteredChats} handleSelect={handleSelect} />
+          </>
+        )}
+      </section>
     </>
   );
 }
