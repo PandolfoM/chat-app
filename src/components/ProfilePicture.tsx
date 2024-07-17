@@ -35,7 +35,7 @@ function ProfilePicture({
                 <img
                   className="object-cover h-full w-full"
                   src={image ? image : ""}
-                  alt={`${user?.username} profile picture`}
+                  alt=""
                 />
               ) : (
                 // getInitials(user?.username as string)
@@ -52,7 +52,7 @@ function ProfilePicture({
                 <img
                   className="object-cover h-full w-full"
                   src={image ? image : currentUserDoc?.pfp}
-                  alt={`${currentUserDoc?.username} profile picture`}
+                  alt=""
                 />
               ) : (
                 // getInitials(currentUserDoc?.username as string)
