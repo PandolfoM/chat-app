@@ -1,7 +1,7 @@
 import React from "react";
-import { ChatPromiseData } from "../pages/Home";
 import Button from "./Button";
 import User from "./User";
+import { ChatPromiseData } from "../pages/HomePages/Chats";
 
 const ChatList = React.memo(
   ({
@@ -16,10 +16,11 @@ const ChatList = React.memo(
         {chats.length > 0 && (
           <div className="flex flex-col gap-3">
             <h3 className="opacity-60 text-sm">Conversation</h3>
-            <div className="flex flex-col gap-7">
+            <div className="flex flex-col gap-1">
               {chats.map((chat) => (
                 <Button
                   variant="ghost"
+                  className="px-1"
                   key={chat.chatId}
                   onClick={() => handleSelect(chat)}>
                   <User user={chat.user} chat={chat} />
