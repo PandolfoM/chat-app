@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../auth/context";
-import { cn, getInitials } from "../lib/utils";
+import { cn } from "../lib/utils";
 import { useLocation } from "react-router-dom";
 import { ChatContext } from "../context/chatContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

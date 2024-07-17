@@ -32,8 +32,7 @@ function NavBar() {
   const [isSearch, setIsSearch] = useState<boolean>(false);
   const { currentUser, setCurrentUser, currentUserDoc } =
     useContext(AuthContext);
-  const { user, changeBlock, isReceiverBlocked, isCurrentUserBlocked } =
-    useContext(ChatContext);
+  const { user, changeBlock, isReceiverBlocked } = useContext(ChatContext);
 
   const handleSignout = async () => {
     try {

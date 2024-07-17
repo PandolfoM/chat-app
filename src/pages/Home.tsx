@@ -1,13 +1,7 @@
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NewChatDialog } from "../components/dialogs";
-import {
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext, UserDocI } from "../auth/context";
 import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
@@ -16,8 +10,6 @@ import { ChatContext } from "../context/chatContext";
 import { useNavigate } from "react-router-dom";
 import ChatList from "../components/ChatList";
 import { AppContext } from "../context/appContext";
-import Button from "../components/Button";
-import User from "../components/User";
 
 export interface ChatPromiseData {
   chatId: string;
@@ -89,7 +81,7 @@ function Home() {
   };
 
   const filteredChats = chats.filter((c) =>
-    c.user.username.toLowerCase().includes(search?.toLowerCase() as string)
+    c.user.username?.toLowerCase().includes(search?.toLowerCase() as string)
   );
 
   return (
@@ -111,22 +103,7 @@ function Home() {
             </div>
           </div> */}
             {/* Chats */}
-            {/* <ChatList chats={filteredChats} handleSelect={handleSelect} /> */}
-            {chats.length > 0 && (
-              <div className="flex flex-col gap-3">
-                <h3 className="opacity-60 text-sm">Conversation</h3>
-                <div className="flex flex-col gap-7">
-                  {filteredChats.map((chat) => (
-                    <Button
-                      variant="ghost"
-                      key={chat.chatId}
-                      onClick={() => handleSelect(chat)}>
-                      <User user={chat.user} chat={chat} />
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            )}
+            <ChatList chats={filteredChats} handleSelect={handleSelect} />
           </section>
         )}
         <section className="fixed right-1/2 translate-x-1/2 flex flex-col items-end bottom-5 w-[90%]">

@@ -1,17 +1,17 @@
 {
-  "productName": "chat-app",
+  "productName": "banter",
   "version": "0.0.0",
-  "identifier": "com.tauri.dev",
+  "identifier": "com.banter.app",
   "build": {
     "beforeDevCommand": "npm run dev",
-    "devUrl": "http://localhost:1420",
+    "devUrl": "http://localhost:3000",
     "beforeBuildCommand": "npm run build",
     "frontendDist": "../dist"
   },
   "app": {
     "windows": [
       {
-        "title": "chat-app",
+        "title": "Banter",
         "width": 400,
         "height": 600,
         "minWidth": 400,
