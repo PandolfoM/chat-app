@@ -12,7 +12,7 @@ type Props = {
 
 function User({ user, chat }: Props) {
   return (
-    <div className="flex gap-3 w-full">
+    <div className="flex gap-3 w-full overflow-x-visible">
       <span
         className={cn(
           `w-12 h-12 aspect-square text-white rounded-full flex items-center justify-center ring-2 ring-offset-2 ring-success ring-opacity-60`,

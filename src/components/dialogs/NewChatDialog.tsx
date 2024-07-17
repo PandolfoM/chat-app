@@ -9,12 +9,14 @@ import {
   arrayUnion,
   collection,
   doc,
+  endAt,
   getDocs,
+  orderBy,
   query,
   serverTimestamp,
   setDoc,
+  startAt,
   updateDoc,
-  where,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import { AuthContext, UserDocI } from "../../auth/context";
@@ -29,7 +31,7 @@ type FormData = yup.InferType<typeof schema>;
 
 function NewChatDialog({ children }: { children: ReactNode }) {
   const { register, handleSubmit } = useForm({ resolver: yupResolver(schema) });
-  const [user, setUser] = useState<UserDocI | null>(null);
+  const [users, setUsers] = useState<UserDocI[] | null>(null);
   const { currentUserDoc } = useContext(AuthContext);
 
   const handleSearch = async (data: FormData) => {
@@ -41,20 +43,26 @@ function NewChatDialog({ children }: { children: ReactNode }) {
       const userRef = collection(db, "users");
       const q = query(
         userRef,
-        where("lowercaseUsername", "==", data.username.toLowerCase())
+        orderBy("lowercaseUsername"),
+        startAt(data.username),
+        endAt(data.username + "\uf8ff")
       );
 
       const querySnapShot = await getDocs(q);
+      const usersArr: any = [];
 
-      if (!querySnapShot.empty) {
-        setUser(querySnapShot.docs[0].data() as UserDocI);
-      }
+      querySnapShot.forEach((doc) => {
+        if (doc.data().id === currentUserDoc?.id) return;
+        usersArr.push(doc.data());
+      });
+
+      setUsers(usersArr);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const handleAdd = async () => {
+  const handleAdd = async (user: UserDocI) => {
     const chatRef = collection(db, "chats");
     const userChatsRef = collection(db, "userchats");
 
@@ -83,26 +91,36 @@ function NewChatDialog({ children }: { children: ReactNode }) {
           updatedAt: Date.now(),
         }),
       });
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
     <Dialog>
       <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="px-3 flex flex-col max-h-[80%]">
         <DialogTitle>New Chat</DialogTitle>
         <form
           onSubmit={handleSubmit(handleSearch)}
-          className="flex flex-col gap-4 items-center w-9/12 m-auto">
+          className="flex flex-col gap-4 items-center w-full h-full m-auto overflow-hidden">
           <Input
             placeholder="Username"
             className="w-full"
             {...register("username")}
           />
-          {user && (
-            <Button variant="ghost" className="px-0" onClick={handleAdd}>
-              <User key={user.id} user={user} />
-            </Button>
+          {users && (
+            <div className="overflow-y-auto w-full flex-col flex h-full">
+              {users.map((user) => (
+                <Button
+                  key={user.id}
+                  variant="ghost"
+                  className="px-3"
+                  onClick={() => handleAdd(user)}>
+                  <User key={user.id} user={user} />
+                </Button>
+              ))}
+            </div>
           )}
           <Button variant="filled" className="w-full" type="submit">
             Search
