@@ -148,7 +148,7 @@ function Chat() {
 
           userChatsData.chats[chatIndex].lastMessage = data.msg;
 
-          reset();
+          reset({ msg: "", image: null });
           setImageSrc(null);
 
           userChatsData.chats[chatIndex].isSeen =
