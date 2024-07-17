@@ -20,7 +20,14 @@ import ProfilePicture from "../components/ProfilePicture";
 
 const schema = yup
   .object({
-    username: yup.string().required("Required"),
+    username: yup
+      .string()
+      .required("Required")
+      .matches(
+        /^[a-z0-9]+$/,
+        "Username must be lowercase and contain only letters and numbers"
+      ),
+    displayName: yup.string().required("Required"),
   })
   .required();
 type FormData = yup.InferType<typeof schema>;
@@ -41,7 +48,7 @@ function RegisterName() {
         const usersRef = collection(db, "users");
         const q = query(
           usersRef,
-          where("lowercaseUsername", "==", data.username.toLowerCase())
+          where("username", "==", data.username.toLowerCase())
         );
         const querySnapshot = await getDocs(q);
 
@@ -50,12 +57,12 @@ function RegisterName() {
         }
 
         await updateProfile(currentUser, {
-          displayName: data.username,
+          displayName: data.username.toLowerCase(),
         });
 
         await updateDoc(doc(db, "users", currentUser?.uid), {
-          username: data.username,
-          lowercaseUsername: data.username.toLowerCase(),
+          username: data.username.toLowerCase(),
+          displayName: data.displayName,
         });
 
         navigate("/");
@@ -79,11 +86,25 @@ function RegisterName() {
           autoCapitalize="off"
           className="flex flex-col gap-2 w-full h-full p-2 pb-10 justify-between"
           onSubmit={handleSubmit(saveUsername)}>
-          <div>
+          <div className="flex flex-col gap-2">
             <h2 className="text-xl font-bold py-3 pl-3">Create a username</h2>
             <div>
-              <Input placeholder="Username" {...register("username")} />
+              <Input
+                placeholder="Username"
+                {...register("username")}
+                onInput={(e) => {
+                  e.currentTarget.value = e.currentTarget.value
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]/g, "");
+                }}
+              />
               <p className="text-sm text-error">{errors.username?.message}</p>
+            </div>
+            <div>
+              <Input placeholder="Display Name" {...register("displayName")} />
+              <p className="text-sm text-error">
+                {errors.displayName?.message}
+              </p>
             </div>
           </div>
           <Button variant="filled" className="w-full mt-4" type="submit">

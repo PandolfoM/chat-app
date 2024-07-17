@@ -84,7 +84,7 @@ function Chats() {
   return (
     <>
       <h1 className="px-5 text-3xl font-extrabold">Chat</h1>
-      <section className="bg-backgroundSecondary flex-1 rounded-t-2xl p-3">
+      <section className="bg-backgroundSecondary flex-1 rounded-t-2xl p-2">
         {chats.length > 0 && (
           <>
             {/* Pinned */}

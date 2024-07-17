@@ -84,7 +84,7 @@ function NavBar() {
           <div>
             {location.pathname !== "/chat" ? (
               <>
-                <h3>{currentUser?.displayName}</h3>
+                <h3>{currentUserDoc?.displayName}</h3>
                 {currentUserDoc && <Status user={currentUserDoc} />}
               </>
             ) : (

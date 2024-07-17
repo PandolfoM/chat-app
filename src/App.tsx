@@ -11,7 +11,7 @@ import Spinner from "./components/Spinner";
 import Settings from "./pages/Settings";
 
 function App() {
-  const { currentUser, isLoading } = useContext(AuthContext);
+  const { currentUser, currentUserDoc, isLoading } = useContext(AuthContext);
 
   const ProtectedRoute = ({ children }: { children: ReactNode }) => {
     if (isLoading) {
@@ -38,8 +38,8 @@ function App() {
       );
     }
 
-    if (currentUser) {
-      if (currentUser.displayName === null) {
+    if (currentUserDoc) {
+      if (!currentUserDoc?.displayName) {
         return <Navigate to="/registername" />;
       } else {
         return <Navigate to="/" />;

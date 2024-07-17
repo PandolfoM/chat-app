@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { UserDocI } from "../auth/context";
 import { cn, formatDate } from "../lib/utils";
-import { ChatPromiseData } from "../pages/Home";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import ProfilePicture from "./ProfilePicture";
+import { ChatPromiseData } from "../pages/HomePages/Chats";
 
 type Props = {
   user: UserDocI;
@@ -35,7 +35,7 @@ function User({ user, chat }: Props) {
             "flex flex-col w-full justify-end"
           )}>
           <span className="flex justify-between">
-            <p className="text-sm font-semibold">{user.username}</p>
+            <p className="text-sm font-semibold">{user.displayName}</p>
             {chat && (
               <p className="font-light text-xs text-black/60">
                 {formatDate(chat.updatedAt)}

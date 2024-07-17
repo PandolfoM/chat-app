@@ -44,11 +44,16 @@ function Signup() {
         prevStatus: "online",
         statusMsg: "",
         blocked: [],
+        friends: [],
         color: getProfileColor(),
       });
 
       await setDoc(doc(db, "userchats", res.user.uid), {
         chats: [],
+      });
+
+      await setDoc(doc(db, "userfriendrequests", res.user.uid), {
+        requests: [],
       });
 
       setCurrentUser(res.user);
