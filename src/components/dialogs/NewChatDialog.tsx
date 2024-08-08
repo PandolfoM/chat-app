@@ -36,14 +36,14 @@ function NewChatDialog({ children }: { children: ReactNode }) {
 
   const handleSearch = async (data: FormData) => {
     try {
-      if (data.username.toLowerCase() === currentUserDoc?.lowercaseUsername) {
+      if (data.username.toLowerCase() === currentUserDoc?.username) {
         return;
       }
 
       const userRef = collection(db, "users");
       const q = query(
         userRef,
-        orderBy("lowercaseUsername"),
+        orderBy("username"),
         startAt(data.username),
         endAt(data.username + "\uf8ff")
       );

@@ -39,6 +39,7 @@ function Chats() {
             return { ...item, user };
           });
           const chatData = await Promise.all(promises);
+
           setChats((prevChats) =>
             prevChats.length === chatData.length
               ? chatData

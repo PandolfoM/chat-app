@@ -1,16 +1,29 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { UserDocI } from "../auth/context";
 import { cn, formatDate } from "../lib/utils";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faUser, faX } from "@fortawesome/free-solid-svg-icons";
 import ProfilePicture from "./ProfilePicture";
 import { ChatPromiseData } from "../pages/HomePages/Chats";
+import Button from "./Button";
+import { RequestsI } from "../lib/interfaces";
 
 type Props = {
   user: UserDocI;
   chat?: ChatPromiseData;
+  acceptFunc?: () => void;
+  denyFunc?: () => void;
+  cancelFunc?: () => void;
+  friendReq?: RequestsI;
 };
 
-function User({ user, chat }: Props) {
+function User({
+  user,
+  chat,
+  acceptFunc,
+  denyFunc,
+  cancelFunc,
+  friendReq,
+}: Props) {
   return (
     <div className="flex gap-3 w-full overflow-x-visible">
       <span
@@ -32,16 +45,55 @@ function User({ user, chat }: Props) {
         <div
           className={cn(
             chat?.lastMessage !== "" && "pb-5",
-            "flex flex-col w-full justify-end"
+            "flex flex-col w-full justify-end relative"
           )}>
           <span className="flex justify-between">
             <p className="text-sm font-semibold">{user.displayName}</p>
+
             {chat && (
               <p className="font-light text-xs text-black/60">
                 {formatDate(chat.updatedAt)}
               </p>
             )}
           </span>
+          {friendReq && (
+            <span className="flex justify-between">
+              <p className="font-light text-xs text-black/60 capitalize">
+                {friendReq?.status}
+              </p>
+            </span>
+          )}
+          {(acceptFunc || denyFunc || cancelFunc) && (
+            <span className="flex justify-end items-center gap-3 absolute right-0 top-1/2 -translate-y-1/2">
+              {cancelFunc ? (
+                <Button
+                  variant="ghost"
+                  className="p-0 bg-customGrey w-8 h-8"
+                  onClick={cancelFunc}>
+                  <FontAwesomeIcon icon={faX} />
+                </Button>
+              ) : (
+                <>
+                  {acceptFunc && (
+                    <Button
+                      variant="ghost"
+                      className="p-0 bg-success w-8 h-8"
+                      onClick={acceptFunc}>
+                      <FontAwesomeIcon icon={faCheck} />
+                    </Button>
+                  )}
+                  {denyFunc && (
+                    <Button
+                      variant="ghost"
+                      className="p-0 bg-customGrey w-8 h-8"
+                      onClick={denyFunc}>
+                      <FontAwesomeIcon icon={faX} />
+                    </Button>
+                  )}
+                </>
+              )}
+            </span>
+          )}
           {chat && (
             <span className="flex justify-between items-center">
               <p className="text-sm font-light">{chat.lastMessage}</p>
